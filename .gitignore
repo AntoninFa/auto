@@ -1,0 +1,6 @@
+
+# compilierter Output
+/dist
+
+# von npm Abhängige Dateien
+/node_modules

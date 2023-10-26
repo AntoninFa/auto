@@ -1,0 +1,7 @@
+
+# (Binaer-) Dateien, die nicht modifiziert werden sollen
+*.png binary
+*.jpg binary
+*.cer binary
+*.pem binary
+package-lock.json binary
