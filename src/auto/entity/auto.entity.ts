@@ -12,7 +12,6 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { dbType } from '../../config/dbtype.js';
 
 /**
  * Alias-Typ, definiert gültige Arten von Getrieben.
