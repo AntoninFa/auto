@@ -7,12 +7,14 @@ import {
     Column,
     PrimaryGeneratedColumn,
     Entity,
+    OneToMany,
     VersionColumn,
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { dbType } from '../../config/dbtype.js';
+import { Ausstattung } from './ausstattung.entity.js';
+import { DecimalTransformer } from './decimal-transformer.js';
 
 /**
  * Alias-Typ, definiert gültige Arten von Getrieben.
@@ -75,6 +77,11 @@ export class Auto {
         type: 'timestamp',
     })
     readonly aktualisiert: Date | undefined;
+
+    @OneToMany(() => Ausstattung, (ausstattung) => ausstattung.auto, {
+        cascade: ['insert', 'remove'],
+    })
+    readonly ausstattung: Ausstattung[] | undefined;
 
     public toString = (): string =>
         JSON.stringify({
