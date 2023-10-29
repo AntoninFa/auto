@@ -4,3 +4,7 @@
 
 # von npm Abhängige Dateien
 /node_modules
+
+# Generierte Dateien
+build
+package-lock.json
