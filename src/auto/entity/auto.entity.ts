@@ -7,6 +7,7 @@ import {
     Column,
     PrimaryGeneratedColumn,
     Entity,
+    OneToOne,
     OneToMany,
     VersionColumn,
     CreateDateColumn,
@@ -15,6 +16,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { Ausstattung } from './ausstattung.entity.js';
 import { DecimalTransformer } from './decimal-transformer.js';
+import { Eigentuemer } from './eigentuemer.entity.js';
 
 /**
  * Alias-Typ, definiert gültige Arten von Getrieben.
@@ -77,6 +79,11 @@ export class Auto {
         type: 'timestamp',
     })
     readonly aktualisiert: Date | undefined;
+
+    @OneToOne(() => Eigentuemer, (eigentuemer) => eigentuemer.auto, {
+        cascade: ['insert', 'remove'],
+    })
+    readonly eigentuemer: Eigentuemer | undefined;
 
     @OneToMany(() => Ausstattung, (ausstattung) => ausstattung.auto, {
         cascade: ['insert', 'remove'],
