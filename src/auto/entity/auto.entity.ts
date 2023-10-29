@@ -1,4 +1,7 @@
-//TODO package doc
+/**
+ * Dieses Modul enthält die Entity-Klasse Auto.
+ * @packageDocumentation
+ */
 
 import {
     Column,
@@ -64,15 +67,13 @@ export class Auto {
     readonly getriebeArt: GetriebeType | undefined;
 
     @CreateDateColumn({
-        type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
+        type: 'timestamp',
     })
     readonly erzeugt: Date | undefined;
 
     @UpdateDateColumn({
-        type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
+        type: 'timestamp',
     })
-    // SQLite:
-    // @UpdateDateColumn({ type: 'datetime' })
     readonly aktualisiert: Date | undefined;
 
     public toString = (): string =>
