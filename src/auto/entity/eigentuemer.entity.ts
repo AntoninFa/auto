@@ -20,7 +20,7 @@ export class Eigentuemer {
     readonly geburtsdatum: Date | string | undefined;
 
     @Column('varchar', { length: 20 })
-    readonly führerscheinnummer: string | undefined;
+    readonly fuehrerscheinnummer: string | undefined;
 
     @OneToOne(() => Auto, (auto) => auto.eigentuemer)
     @JoinColumn({ name: 'auto_id' })
@@ -31,6 +31,6 @@ export class Eigentuemer {
             id: this.id,
             name: this.name,
             geburtsdatum: this.geburtsdatum,
-            führerscheinnummer: this.führerscheinnummer,
+            fuehrerscheinnummer: this.fuehrerscheinnummer,
         });
 }
