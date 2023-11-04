@@ -8,8 +8,7 @@ import { ApiProperty } from '@nestjs/swagger';
 /**
  * Entity-Klasse für einen Eigentuemer ohne TypeORM.
  */
-export class eigentuemerDTO {
-
+export class EigentuemerDTO {
     @MaxLength(40)
     @ApiProperty({ example: 'Edsger Dijkstra', type: String })
     readonly name!: string;
