@@ -21,5 +21,5 @@ export class eigentuemerDTO {
     @IsOptional()
     @MaxLength(20)
     @ApiProperty({ example: '1234567890' })
-    readonly führerscheinnummer: string | undefined;
+    readonly fuehrerscheinnummer: string | undefined;
 }
