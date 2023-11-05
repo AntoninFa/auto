@@ -5,8 +5,8 @@
 
 import { nodeConfig } from '../../config/node.js';
 import { type Request } from 'express';
-import { BuchReadService } from '../service/buch-read.service.js';
-//TODO Buch Read Service
+import { AutoReadService } from '../service/auto-read.service.js';
+//TODO Auto Read Service
 
 const port = `:${nodeConfig.port}`;
 
@@ -16,7 +16,7 @@ export const getBaseUri = (req: Request) => {
     const indexLastSlash = basePath.lastIndexOf('/');
     if (indexLastSlash > 0) {
         const idStr = basePath.slice(indexLastSlash + 1);
-        if (BuchReadService.ID_PATTERN.test(idStr)) {
+        if (AutoReadService.ID_PATTERN.test(idStr)) {
             basePath = basePath.slice(0, indexLastSlash);
         }
     }

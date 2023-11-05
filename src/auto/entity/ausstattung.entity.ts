@@ -50,7 +50,7 @@ export class Ausstattung {
     /**
      * 1:n Beziehung zu Ausstattung. 
      */
-    @ManyToOne(() => Auto, (auto) => auto.ausstattung)
+    @ManyToOne(() => Auto, (auto) => auto.ausstattungen)
     @JoinColumn({ name: 'auto_id' })
     auto: Auto | undefined;
     

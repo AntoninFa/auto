@@ -44,7 +44,7 @@ export class Auto {
 
     @Column('varchar', { unique: true, length: 40 })
     @ApiProperty({ example: '1HGCM82633A123456' })
-    readonly fin: string | undefined;
+    readonly fin!: string;
 
     @Column('int')
     @ApiProperty({ example: 1000, type: Number })
@@ -88,7 +88,7 @@ export class Auto {
     @OneToMany(() => Ausstattung, (ausstattung) => ausstattung.auto, {
         cascade: ['insert', 'remove'],
     })
-    readonly ausstattung: Ausstattung[] | undefined;
+    readonly ausstattungen: Ausstattung[] | undefined;
 
     public toString = (): string =>
         JSON.stringify({

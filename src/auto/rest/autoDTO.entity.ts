@@ -36,7 +36,7 @@ export class AutoDtoOhneRef {
     @IsAlphanumeric()
     @Length(17, 17)
     @ApiProperty({ example: '1HGCM82633A400195' })
-    readonly fin: string | undefined;
+    readonly fin!: string;
 
     @IsNumber()
     @Min(0)
