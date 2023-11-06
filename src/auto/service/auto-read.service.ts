@@ -78,7 +78,7 @@ export class AutoReadService {
             if (mitAusstattung) {
                 this.#logger.debug(
                     'findById: ausstattung=%o',
-                    auto.ausstattung,
+                    auto.ausstattungen,
                 );
             }
         }
