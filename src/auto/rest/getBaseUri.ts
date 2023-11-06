@@ -6,7 +6,6 @@
 import { nodeConfig } from '../../config/node.js';
 import { type Request } from 'express';
 import { AutoReadService } from '../service/auto-read.service.js';
-//TODO Auto Read Service
 
 const port = `:${nodeConfig.port}`;
 
