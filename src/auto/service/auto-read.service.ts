@@ -1,5 +1,6 @@
 /**
- * Die Klasse bildet die Service-Klasse für den Auto-Readservice ab. 
+ * Dieses Modul enthält die {@linkcode Auto-ReadService} Klasse,
+ * als Abstraktion von Leseoperationen im Anwendungskern und DB-Zugriffen.
  * @packageDocumentation
  */
 
@@ -17,7 +18,6 @@ import { QueryBuilder } from './query-builder.js';
 export interface FindByIdParams {
     readonly id: number; 
     readonly mitAusstattung?: boolean; 
-    readonly mitEigentuemer?: boolean; 
 }
 
 /**
@@ -60,11 +60,11 @@ export class AutoReadService {
         this.#queryBuilder = queryBuilder;
     }
 
-    async findById({id, mitEigentuemer = false, mitAusstattung=false}: FindByIdParams): Promise<Auto> {
+    async findById({id, mitAusstattung=false}: FindByIdParams): Promise<Auto> {
         this.#logger.debug('findById: id=%d', id);
         
         const auto: Auto | null = await this.#queryBuilder
-            .buildId({id, mitAusstattung, mitEigentuemer})
+            .buildId({id, mitAusstattung})
             .getOne();
         if (auto === null) {
             throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}.`);
