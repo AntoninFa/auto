@@ -5,7 +5,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import RE2 from 're2';
-import { Auto, GetriebeType } from '../entity/auto.entity';
+import { Auto, GetriebeType, HerstellerType } from '../entity/auto.entity';
 import { Eigentuemer } from '../entity/eigentuemer.entity';
 import { Ausstattung } from '../entity/ausstattung.entity';
 import { getLogger } from '../../logger/logger';
@@ -25,6 +25,7 @@ export interface FindByIdParams {
  */
 export interface Suchkriterien {
     readonly modellbezeichnung?: string; 
+    readonly hersteller?: HerstellerType;
     readonly fin?: string; 
     readonly kilometerstand?: number; 
     readonly auslieferungstag?: Date; 
