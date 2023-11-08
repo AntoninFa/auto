@@ -25,6 +25,11 @@ import { Eigentuemer } from './eigentuemer.entity.js';
 export type GetriebeType = 'MANUELL' | 'AUTOMATIK';
 
 /**
+ * Alias-Typ, definiert Arten von Autoherstellern.
+ */
+export type HerstellerType = 'VOLKSWAGEN' | 'AUDI' | 'DAIMLER' | 'RENAULT';
+
+/**
  *  Entity Klasse zu einer relationalen Tabelle.
  *  Modelliert ein Auto.
  */
@@ -39,10 +44,14 @@ export class Auto {
     readonly version: number | undefined;
 
     @Column('varchar', { unique: true, length: 40 })
-    @ApiProperty({ example: 'Volkswagen Golf' })
+    @ApiProperty({ example: 'Golf' })
     readonly modellbezeichnung!: string;
 
-    @Column('varchar', { unique: true, length: 40 })
+    @Column('varchar', {length: 10})
+    @ApiProperty({ example: 'Audi'})
+    readonly hersteller! : HerstellerType | undefined; 
+
+    @Column('varchar', { unique: true, length: 17 })
     @ApiProperty({ example: '1HGCM82633A123456' })
     readonly fin!: string;
 
@@ -95,6 +104,7 @@ export class Auto {
             id: this.id,
             version: this.version,
             modellbezeichnung: this.modellbezeichnung,
+            hersteller: this.hersteller,
             fin: this.fin,
             kilometerstand: this.kilometerstand,
             auslieferungstag: this.auslieferungstag,

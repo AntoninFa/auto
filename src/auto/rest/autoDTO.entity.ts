@@ -19,7 +19,10 @@ import {
 } from 'class-validator';
 import { AusstattungDTO } from './ausstattungDTO.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
-import { type GetriebeType } from '../entity/auto.entity.js';
+import { 
+    type GetriebeType, 
+    type HerstellerType, 
+} from '../entity/auto.entity.js';
 import { EigentuemerDTO } from './eigentuemerDTO.entity.js';
 import { Type } from 'class-transformer';
 
@@ -29,8 +32,13 @@ import { Type } from 'class-transformer';
 export class AutoDtoOhneRef {
     @IsString()
     @Length(40)
-    @ApiProperty({ example: 'Ford Mustang' })
+    @ApiProperty({ example: 'Mustang' })
     readonly modellbezeichnung!: string;
+
+    @Matches(/^VOLKSWAGEN$|^AUDI$|^DAIMLER$|^RENAULT$/u)
+    @IsOptional()
+    @ApiProperty({ example: 'AUDI', type: String})
+    readonly hersteller: HerstellerType | undefined;
 
     @IsString()
     @IsAlphanumeric()
