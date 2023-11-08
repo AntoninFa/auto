@@ -49,7 +49,7 @@ export class AutoDtoOhneRef {
     @IsNumber()
     @Min(0)
     @ApiProperty({ example: 50000,  type: Number })
-    readonly kilometerstand: string | undefined;
+    readonly kilometerstand: number | undefined;
 
     @IsISO8601({ strict: true })
     @IsOptional()
