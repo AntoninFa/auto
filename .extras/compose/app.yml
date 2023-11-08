@@ -1,0 +1,25 @@
+# DB soll mit initalen Daten gefüllt werden
+db:
+  populate: true
+  host: postgres
+
+# Health print-config
+health:
+  prettyPrint: true
+
+# Logging Verhalten und print-config.
+log:
+  level: debug
+  dir: /tmp
+  pretty: true
+
+# Mailserver config.
+mail:
+  host: fakesmtp
+  port: 8025
+  log: false
+
+# Authentifizierungs conifg, mit verschlüsseltem Password zur Authentifizierung.
+auth:
+  passwordEncoded: '$argon2i$v=19$m=4096,t=3,p=1$aaxA2v/9rRSPGkwYN+NQog$27Huii1XtD3iEd62fog+04G26LRPZMHoYCI6AGKTL8M'
+  
