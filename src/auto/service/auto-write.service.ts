@@ -18,6 +18,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AutoReadService } from './auto-read.service.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
+import { MailService } from '../../mail/mail.service.js';
 
 /**
  * Typdefinitionen, die die Struktur eines Objekt vorgeben, das zum Updaten
@@ -47,14 +48,16 @@ export class AutoWriteService {
     readonly #repo: Repository<Auto>;
     readonly #readService: AutoReadService;
     readonly #logger = getLogger(AutoWriteService.name);
-    //TODO Mail Service
+    readonly #mailService: MailService;
 
     constructor(
         @InjectRepository(Auto) repo: Repository<Auto>,
         readService: AutoReadService,
+        mailService: MailService,
     ) {
         this.#repo = repo;
         this.#readService = readService;
+        this.#mailService = mailService;
     }
 
     /**
@@ -67,13 +70,12 @@ export class AutoWriteService {
         await this.#validateCreate(auto);
         const autoDb = await this.#repo.save(auto);
         this.#logger.debug('create: autoDb=%o', autoDb);
-        //TODO Mail
+        await this.#writeMail(autoDb, 'neu angelegt', 'neu angelegt');
         return autoDb.id!;
     }
 
     async #validateCreate(auto: Auto): Promise<undefined> {
         this.#logger.debug('#validateCreate: auto=%o', auto);
-
         const { fin } = auto;
         try {
             await this.#readService.find({ fin: fin});
@@ -171,7 +173,6 @@ export class AutoWriteService {
         });
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
-            
             const eigentuemerID = auto.eigentuemer?.id;
             if (eigentuemerID !== undefined) {
                 await transactionalMgr.delete(Eigentuemer, eigentuemerID);
@@ -188,5 +189,14 @@ export class AutoWriteService {
             deleteResult.affected !== null &&
             deleteResult.affected > 0
         );
+    }
+
+    async #writeMail(auto: Auto, s1: string, s2: string) {
+        const subject = `Auto ${s1} (ID: ${auto.id})`;
+        const fin = auto.fin;
+        const eigentuemer = auto.eigentuemer?.name ?? 'Unbekannt';
+        const body = `Ein Auto mit der fin: ${fin} 
+        und dem Eigentümer ${eigentuemer} wurde ${s2}`;
+        await this.#mailService.writeMail({subject, body})
     }
 }
