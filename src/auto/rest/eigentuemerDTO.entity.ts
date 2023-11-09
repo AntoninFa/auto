@@ -11,7 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class EigentuemerDTO {
     @MaxLength(40)
     @ApiProperty({ example: 'Edsger Dijkstra', type: String })
-    readonly name!: string;
+    readonly eigentuemer!: string;
 
     @IsOptional()
     @ApiProperty({ example: '2001-01-01' })

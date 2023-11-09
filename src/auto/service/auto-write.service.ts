@@ -194,7 +194,7 @@ export class AutoWriteService {
     async #writeMail(auto: Auto, s1: string, s2: string) {
         const subject = `Auto ${s1} (ID: ${auto.id})`;
         const fin = auto.fin;
-        const eigentuemer = auto.eigentuemer?.name ?? 'Unbekannt';
+        const eigentuemer = auto.eigentuemer?.eigentuemer ?? 'Unbekannt';
         const body = `Ein Auto mit der fin: ${fin} 
         und dem Eigentümer ${eigentuemer} wurde ${s2}`;
         await this.#mailService.writeMail({subject, body})

@@ -14,7 +14,7 @@ export class Eigentuemer {
     id: number | undefined;
 
     @Column('varchar', { unique: true, length: 50 })
-    readonly name!: string;
+    readonly eigentuemer!: string;
 
     @Column('date')
     readonly geburtsdatum: Date | string | undefined;
@@ -29,7 +29,7 @@ export class Eigentuemer {
     public toString = (): string =>
         JSON.stringify({
             id: this.id,
-            name: this.name,
+            eigentuemer: this.eigentuemer,
             geburtsdatum: this.geburtsdatum,
             fuehrerscheinnummer: this.fuehrerscheinnummer,
         });

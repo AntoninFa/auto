@@ -8,17 +8,13 @@ import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { type Suchkriterien } from './auto-read.service.js';
 import { Repository, SelectQueryBuilder } from 'typeorm';
-import { typeOrmModuleOptions } from '../../config/db.js';
 import { getLogger } from '../../logger/logger';
-
-
 
 /**
  * Typdefinition für die Autosuche. 
  */
 export interface BuildIdParams {
     readonly id: number; 
-    readonly mitEigentuemer?: boolean; 
     readonly mitAusstattung?: boolean; 
 }
 
@@ -55,19 +51,13 @@ export class QueryBuilder {
      * @param id ID des gesuchten Autos
      * @returns QueryBuilder
      */
-    buildId({ id, mitEigentuemer = false, mitAusstattung = false} : BuildIdParams):SelectQueryBuilder<Auto> {
+    buildId({ id, mitAusstattung = false}: BuildIdParams): SelectQueryBuilder<Auto> {
         const queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
         queryBuilder.innerJoinAndSelect(
-            //ToDo `${this.#autoAlias}.modellbezeichnung`, in hersteller?
+            `${this.#autoAlias}.eigentuemer`, 
             this.#eigentuemerAlias,
-            this.#ausstattungAlias,
         );
-        if (mitEigentuemer) {
-            queryBuilder.leftJoinAndSelect(
-                `${this.#autoAlias}.eigentuemer`,
-                this.#eigentuemerAlias,
-            );
-        }
+
         if (mitAusstattung) {
             queryBuilder.leftJoinAndSelect(
                 `${this.#autoAlias}.ausstattung`,
@@ -94,11 +84,9 @@ export class QueryBuilder {
         );
 
         let queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
-        queryBuilder.innerJoinAndSelect(`${this.#autoAlias}.modellbezeichnung`, 'modellbezeichnung');//TODO wandel in hersteller?
+        queryBuilder.innerJoinAndSelect(`${this.#autoAlias}.`, 'eigentuemer');
 
         let useWhere: boolean = true; 
-
-        //TODO Hersteller if-Block einbauen
 
         if (javascript === 'true') {
             queryBuilder = useWhere
