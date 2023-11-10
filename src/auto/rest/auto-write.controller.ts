@@ -184,7 +184,7 @@ export class AutoWriteController {
         const eigentuemerDTO = autoDTO.eigentuemer;
         const eigentuemer: Eigentuemer = {
             id: undefined,
-            name: eigentuemerDTO.name,
+            eigentuemer: eigentuemerDTO.eigentuemer,
             geburtsdatum: eigentuemerDTO.geburtsdatum,
             fuehrerscheinnummer: eigentuemerDTO.fuehrerscheinnummer,
             auto: undefined,

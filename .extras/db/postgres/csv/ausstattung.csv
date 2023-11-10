@@ -1,0 +1,7 @@
+id;bezeichnung;preis;verfügbar
+1;'Sitzheitzung';11.1;true
+3;'Klima';22.2;true
+10;'Beleuchtung';25.2;false
+15;'Getränkehalter';59.9;false
+80;'Navi'; 60.5;true
+99;'Panoramadach';3.4;false
