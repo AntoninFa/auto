@@ -1,0 +1,1807 @@
+{
+	"info": {
+		"_postman_id": "43a988ee-9a62-4fd1-b924-c5f63c824320",
+		"name": "REST",
+		"description": "REST-Schnittstelle",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30032699",
+		"_collection_link": "https://interstellar-capsule-261130.postman.co/workspace/auto~a1e297ce-2ca2-421e-a490-735f773fa243/collection/30032699-43a988ee-9a62-4fd1-b924-c5f63c824320?action=share&source=collection_link&creator=30032699"
+	},
+	"item": [
+		{
+			"name": "Suche mit ID",
+			"item": [
+				{
+					"name": "Vorhandene ID 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Self-Link contains ID', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const selfLink = responseBody._links.self.href;\r",
+									"    pm.expect(selfLink).to.be.a('string');\r",
+									"    pm.expect(selfLink).to.match(/\\/rest\\/1$/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "ID eines Autos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vorhandene ID 1 mit If-None-Match",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('304 response', () => {\r",
+									"    pm.response.to.have.status(304);\r",
+									"});\r",
+									"pm.test('Self-Link contains ID', () => {\r",
+									"    const body = pm.response.text();\r",
+									"    pm.expect(responseBody).to.be.a('string');\r",
+									"    pm.expect(responseBody).to.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "\"0\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "ID eines Autos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vorhandene ID 1 mit falscher Versionsnummer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Self-Link contains ID', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    pm.expect(body._links.self.href).to.be.a('string').that.matches(/\\/rest\\/1$/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "ID eines Autos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nicht-vorhandene ID 420",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Response Body contains Problem Detail', () => {\r",
+									"    const responseBody  = pm.response.json();\r",
+									"    const { message, error, statusCode } = responseBody ;\r",
+									"    pm.expect(message).to.be.a('string').that.includes('420');\r",
+									"    pm.expect(error).to.be.equal('Not Found');\r",
+									"    pm.expect(statusCode).to.be.equal(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "420",
+									"description": "Nicht existierende ID eines Autos"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Suche anhand der ID"
+		},
+		{
+			"name": "Suche mit Suchkriterien",
+			"item": [
+				{
+					"name": "Alle",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response Body Contains at Least 1 Book and self-links', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { autos } = body._embedded;\r",
+									"    pm.expect(autos).to.be.an('array').that.is.not.empty;\r",
+									"    autos.map(auto => auto._links.self.href)\r",
+									"        .forEach(href => pm.expect(href).to.be.a('string').that.matches(/\\/rest\\/[1-9]\\d*$/u));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"name": "cache-control",
+								"sortOrder": 2,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"system": true,
+								"type": "text",
+								"id": 0
+							},
+							{
+								"name": "postman-token",
+								"sortOrder": 3,
+								"infoTitle": "We recommend using this header",
+								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 1
+							},
+							{
+								"name": "host",
+								"sortOrder": 6,
+								"infoTitle": "We recommend using this header",
+								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 2
+							},
+							{
+								"name": "user-agent",
+								"sortOrder": 7,
+								"infoTitle": "We recommend using this header",
+								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.31.1",
+								"system": true,
+								"type": "text",
+								"id": 3
+							},
+							{
+								"name": "accept",
+								"sortOrder": 8,
+								"infoTitle": "We recommend using this header",
+								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept",
+								"value": "*/*",
+								"system": true,
+								"type": "text",
+								"id": 4,
+								"disabled": true
+							},
+							{
+								"name": "accept-encoding",
+								"sortOrder": 9,
+								"infoTitle": "We recommend using this header",
+								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"system": true,
+								"type": "text",
+								"id": 5
+							},
+							{
+								"name": "connection",
+								"sortOrder": 10,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Connection",
+								"value": "keep-alive",
+								"system": true,
+								"type": "text",
+								"id": 6
+							},
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text",
+								"id": 7
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}",
+							"host": [
+								"{{rest_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Teilstring \"Anna\" eines Eigentuemers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response Body contains autos with eigentuemer containing \"Anna\"', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { autos } = body._embedded;\r",
+									"    pm.expect(autos).to.be.an('array').that.is.not.empty;\r",
+									"    autos.forEach(auto => {\r",
+									"        const { eigentuemer, _links } = auto;\r",
+									"        pm.expect(eigentuemer.eigentuemer).to.be.a('string').that.includes('ta');\r",
+									"        pm.expect(_links.self.href).to.be.a('string').that.matches(/\\/rest\\/[1-9]\\d*$/u);\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"name": "cache-control",
+								"sortOrder": 2,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"system": true,
+								"type": "text",
+								"id": 0
+							},
+							{
+								"name": "postman-token",
+								"sortOrder": 3,
+								"infoTitle": "We recommend using this header",
+								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 1
+							},
+							{
+								"name": "host",
+								"sortOrder": 6,
+								"infoTitle": "We recommend using this header",
+								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 2
+							},
+							{
+								"name": "user-agent",
+								"sortOrder": 7,
+								"infoTitle": "We recommend using this header",
+								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.31.1",
+								"system": true,
+								"type": "text",
+								"id": 3
+							},
+							{
+								"name": "accept",
+								"sortOrder": 8,
+								"infoTitle": "We recommend using this header",
+								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept",
+								"value": "*/*",
+								"system": true,
+								"type": "text",
+								"id": 4,
+								"disabled": true
+							},
+							{
+								"name": "accept-encoding",
+								"sortOrder": 9,
+								"infoTitle": "We recommend using this header",
+								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"system": true,
+								"type": "text",
+								"id": 5
+							},
+							{
+								"name": "connection",
+								"sortOrder": 10,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Connection",
+								"value": "keep-alive",
+								"system": true,
+								"type": "text",
+								"id": 6
+							},
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text",
+								"id": 7
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}?eigentuemer=Anna",
+							"host": [
+								"{{rest_url}}"
+							],
+							"query": [
+								{
+									"key": "eigentuemer",
+									"value": "Anna"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nicht-vorhandener Teilstring eines Eigentuemers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Not Found', () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"name": "cache-control",
+								"sortOrder": 2,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"system": true,
+								"type": "text",
+								"id": 0
+							},
+							{
+								"name": "postman-token",
+								"sortOrder": 3,
+								"infoTitle": "We recommend using this header",
+								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 1
+							},
+							{
+								"name": "host",
+								"sortOrder": 6,
+								"infoTitle": "We recommend using this header",
+								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 2
+							},
+							{
+								"name": "user-agent",
+								"sortOrder": 7,
+								"infoTitle": "We recommend using this header",
+								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.31.1",
+								"system": true,
+								"type": "text",
+								"id": 3
+							},
+							{
+								"name": "accept",
+								"sortOrder": 8,
+								"infoTitle": "We recommend using this header",
+								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept",
+								"value": "*/*",
+								"system": true,
+								"type": "text",
+								"id": 4,
+								"disabled": true
+							},
+							{
+								"name": "accept-encoding",
+								"sortOrder": 9,
+								"infoTitle": "We recommend using this header",
+								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"system": true,
+								"type": "text",
+								"id": 5
+							},
+							{
+								"name": "connection",
+								"sortOrder": 10,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Connection",
+								"value": "keep-alive",
+								"system": true,
+								"type": "text",
+								"id": 6
+							},
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text",
+								"id": 7
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}?titel=404",
+							"host": [
+								"{{rest_url}}"
+							],
+							"query": [
+								{
+									"key": "titel",
+									"value": "404"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mit fin von Auto 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Body contains Auto with the specified fin', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { autos } = body._embedded;\r",
+									"    pm.expect(autos).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    const { fin, _links } = autos[0];\r",
+									"    pm.expect(fin).to.be.a('string').that.includes('978-3-897-22583-1');\r",
+									"    pm.expect(_links.self.href).to.be.a('string').that.matches(/\\/rest\\/[1-9]\\d*$/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"name": "cache-control",
+								"sortOrder": 2,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"system": true,
+								"type": "text",
+								"id": 0
+							},
+							{
+								"name": "postman-token",
+								"sortOrder": 3,
+								"infoTitle": "We recommend using this header",
+								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 1
+							},
+							{
+								"name": "host",
+								"sortOrder": 6,
+								"infoTitle": "We recommend using this header",
+								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text",
+								"id": 2
+							},
+							{
+								"name": "user-agent",
+								"sortOrder": 7,
+								"infoTitle": "We recommend using this header",
+								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.31.1",
+								"system": true,
+								"type": "text",
+								"id": 3
+							},
+							{
+								"name": "accept",
+								"sortOrder": 8,
+								"infoTitle": "We recommend using this header",
+								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept",
+								"value": "*/*",
+								"system": true,
+								"type": "text",
+								"id": 4,
+								"disabled": true
+							},
+							{
+								"name": "accept-encoding",
+								"sortOrder": 9,
+								"infoTitle": "We recommend using this header",
+								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"system": true,
+								"type": "text",
+								"id": 5
+							},
+							{
+								"name": "connection",
+								"sortOrder": 10,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Connection",
+								"value": "keep-alive",
+								"system": true,
+								"type": "text",
+								"id": 6
+							},
+							{
+								"key": "Accept",
+								"value": "application/hal+json",
+								"type": "text",
+								"id": 7
+							}
+						],
+						"url": {
+							"raw": "{{rest_url}}?fin=1HGCM82633A123456",
+							"host": [
+								"{{rest_url}}"
+							],
+							"query": [
+								{
+									"key": "fin",
+									"value": "1HGCM82633A123456",
+									"description": "fin eines autos"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Suche anhand von Suchkriterien"
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Als admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Response Body contains toke, expriesIn and roles', () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    console.log(`${JSON.stringify(responseBody)}`);\r",
+									"    const { token, expiresIn, roles } = responseBody;\r",
+									"    pm.expect(token).to.be.a('string').that.matches(/.+\\..+\\..+/u);\r",
+									"    pm.expect(expiresIn).to.be.equal('1h');\r",
+									"    pm.expect(roles).to.be.an('array').that.has.a.lengthOf(2).to.include.members(['admin', 'fachabteilung']);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "p",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{login_url}}",
+							"host": [
+								"{{login_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mit falschem Passwort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Unauthorized', () => {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "FALSCH",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{login_url}}",
+							"host": [
+								"{{login_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ohne Benutzerkennung",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Unauthorized', () => {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{login_url}}",
+							"host": [
+								"{{login_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Login über die REST-Schnittstelle"
+		},
+		{
+			"name": "Neuanlegen",
+			"item": [
+				{
+					"name": "Auto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Created', () => {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test('Location', () => {\r",
+									"    const { response } = pm;\r",
+									"    const location = response.headers.get('Location');\r",
+									"    pm.expect(location).to.match(/\\/rest\\/[1-9]\\d*/u);\r",
+									"});\r",
+									"pm.test('Empty Body', () => {\r",
+									"    const body = pm.response.text();\r",
+									"    pm.expect(body).to.be.a('string').that.is.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Golf\",\r\n  \"hersteller\": \"VOLKSWAGEN\",\r\n  \"fin\": \"5AXKR0C53K0Y01269\",\r\n  \"kilometerstand\": 101,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"MANUELL\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"Karl Heinz\",\r\n    \"geburtsdatum\": \"1980-05-15\",\r\n    \"fuehrerscheinnummer\": \"HKA321\"\r\n  },\r\n  \"ausstattung\": [{\r\n    \"bezeichnung\": \"Sitzheitzung\",\r\n    \"preis\": 22.2, \r\n    \"verfügbar\": true\r\n  }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}",
+							"host": [
+								"{{rest_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auto mit bereits ex. fin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Unprocessable Entity', () => {\r",
+									"    pm.response.to.have.status(422);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response Body Contains Error Message', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { message } = body;\r",
+									"    pm.expect(message).to.be.a('string').that.includes('fin');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Golf\",\r\n  \"hersteller\": \"VOLKSWAGEN\",\r\n  \"fin\": \"1HGCM82633A123456\",\r\n  \"kilometerstand\": 101,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"MANUELL\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"Karl Heinz\",\r\n    \"geburtsdatum\": \"1980-05-15\",\r\n    \"fuehrerscheinnummer\": \"HKA321\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}",
+							"host": [
+								"{{rest_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auto mit ungültigen Daten",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Bad Request', () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Error Messages in the Respnse Body', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { message } = body;\r",
+									"    const props = ['eigentuemer.eigentuemer','eigentuemer.geburtsdatum', 'eigentuemer.fuehrerscheinnummer', 'modellbezeichnung', 'hersteller', 'fin', 'kilometerstand', 'auslieferungstag', 'grundpreis', 'getriebeArt'];\r",
+									"    pm.expect(message).to.be.an('array').that.has.a.lengthOf(props.length);\r",
+									"    message.forEach(msg => pm.expect(msg).to.be.a('string').that.includes.oneOf(props));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"1234jsadklfjsdkfk4jklejlfksdjajsdafjdflded\",\r\n  \"hersteller\": \"_\",\r\n  \"fin\": \"1234jsadklfjsdkfk4jV\",\r\n  \"kilometerstand\": -101,\r\n  \"auslieferungstag\": \"2022-02-30\",\r\n  \"grundpreis\": -250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"FALSCH\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"1234jsadklfjsdkfk4jklejlfksdjajsdafjdflded\",\r\n    \"geburtsdatum\": \"2022-02-30\",\r\n    \"fuehrerscheinnummer\": \"1234jsadklfjsdkfk4jVBSDJSK\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}",
+							"host": [
+								"{{rest_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auto ohne Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Forbidden', () => {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Golf\",\r\n  \"hersteller\": \"VOLKSWAGEN\",\r\n  \"fin\": \"5AXKR0C53K0Y01269\",\r\n  \"kilometerstand\": 101,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"MANUELL\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"Karl Heinz\",\r\n    \"geburtsdatum\": \"1980-05-15\",\r\n    \"fuehrerscheinnummer\": \"HKA321\"\r\n  },\r\n  \"ausstattung\": [{\r\n    \"bezeichnung\": \"Sitzheitzung\",\r\n    \"preis\": 22.2, \r\n    \"verfügbar\": true\r\n  }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}",
+							"host": [
+								"{{rest_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Das anlegen neuer Autos",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://localhost:3000/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/x-www-form-urlencoded'",
+							"    },",
+							"    body: 'username=admin&password=p',",
+							"}, (err, res) => pm.collectionVariables.set('TOKEN', res.json().token));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Ändern",
+			"item": [
+				{
+					"name": "Von Auto mit ID 5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('No Content', () => {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"pm.test('Empty Body', () => {\r",
+									"    const body = pm.response.text();\r",
+									"    pm.expect(body).to.be.a('string').that.is.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "If-Match",
+								"value": "\"0\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Q2\",\r\n  \"hersteller\": \"AUDI\",\r\n  \"fin\": \"WAUZZS54FA098765\",\r\n  \"kilometerstand\": 18099,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": false,\r\n  \"getriebeArt\": \"MANUELL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "von Auto mit ID 5, mit falscher Versionsnummer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Precondition Failed', () => {\r",
+									"    pm.response.to.have.status(412);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Error Message in the body', () => {\r",
+									"    const { message } = pm.response.json();\r",
+									"    pm.expect(message).to.be.a('string').that.includes('Versionsnummer');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "If-Match",
+								"value": "0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Q2\",\r\n  \"hersteller\": \"AUDI\",\r\n  \"fin\": \"WAUZZS54FA098765\",\r\n  \"kilometerstand\": 18099,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": false,\r\n  \"getriebeArt\": \"MANUELL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "von Auto mit ID 5, ohne Versionsnummer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Precondition Required', () => {\r",
+									"    pm.response.to.have.status(428);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Error Message in the body', () => {\r",
+									"    const msg = pm.response.text();\r",
+									"    pm.expect(msg).to.be.a('string').that.includes('If-Match');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Q2\",\r\n  \"hersteller\": \"AUDI\",\r\n  \"fin\": \"WAUZZS54FA098765\",\r\n  \"kilometerstand\": 18099,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": false,\r\n  \"getriebeArt\": \"MANUELL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Von Auto mit nicht-Vorhandener ID 420",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Not Found', () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Error Message in the body', () => {\r",
+									"    const { message } = pm.response.json();\r",
+									"    pm.expect(message).to.be.a('string').that.includes('999999');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "If-Match",
+								"value": "\"0\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Q2\",\r\n  \"hersteller\": \"AUDI\",\r\n  \"fin\": \"WAUZZS54FA098765\",\r\n  \"kilometerstand\": 18099,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": false,\r\n  \"getriebeArt\": \"MANUELL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "420"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Von Auto mit ID 5, mit ungültigen Daten",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Bad Request', () => {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Error Messages in the Respnse Body', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { message } = body;\r",
+									"    const props = ['eigentuemer.eigentuemer','eigentuemer.geburtsdatum', 'eigentuemer.fuehrerscheinnummer', 'modellbezeichnung', 'hersteller', 'fin', 'kilometerstand', 'auslieferungstag', 'grundpreis', 'getriebeArt'];\r",
+									"    pm.expect(message).to.be.an('array').that.has.a.lengthOf(props.length);\r",
+									"    message.forEach(msg => pm.expect(msg).to.be.a('string').that.includes.oneOf(props));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "If-Match",
+								"value": "\"0\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modellbezeichnung\": \"1234jsadklfjsdkfk4jklejlfksdjajsdafjdflded\",\r\n  \"hersteller\": \"_\",\r\n  \"fin\": \"1234jsadklfjsdkfk4jV\",\r\n  \"kilometerstand\": -101,\r\n  \"auslieferungstag\": \"2022-02-30\",\r\n  \"grundpreis\": -250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"FALSCH\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"1234jsadklfjsdkfk4jklejlfksdjajsdafjdflded\",\r\n    \"geburtsdatum\": \"2022-02-30\",\r\n    \"fuehrerscheinnummer\": \"1234jsadklfjsdkfk4jVBSDJSK\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Ändern von Autos",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://localhost:3000/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/x-www-form-urlencoded',",
+							"    },",
+							"    body: 'username=admin&password=p',",
+							"}, (err, res) => pm.collectionVariables.set('TOKEN', res.json().token));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Löschen",
+			"item": [
+				{
+					"name": "Von Auto mit ID 8",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('No Content', () => {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"pm.test('Empty Body', () => {\r",
+									"    const body = pm.response.text();\r",
+									"    pm.expect(body).to.be.a('string').that.is.empty;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "If-Match",
+								"value": "\"0\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "von Auto mit nicht vorhandener ID 420",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Not Found', () => {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "If-Match",
+								"value": "\"0\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{rest_url}}/:id",
+							"host": [
+								"{{rest_url}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "420"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Löschen von Autos",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://localhost:3000/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/x-www-form-urlencoded',",
+							"    },",
+							"    body: 'username=admin&password=p',",
+							"}, (err, res) => pm.collectionVariables.set('TOKEN', res.json().token));"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "rest_url",
+			"value": "{{base_url}}/rest",
+			"type": "string"
+		},
+		{
+			"key": "login_url",
+			"value": "{{base_url}}/auth/login",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
