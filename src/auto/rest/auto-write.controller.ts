@@ -27,6 +27,8 @@ import {
     Put,
     Req,
     Res,
+    UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
 import { AutoDTO, AutoDtoOhneRef } from './autoDTO.entity.js';
 import { Request, Response } from 'express';
@@ -37,14 +39,18 @@ import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { getBaseUri } from './getBaseUri.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
-
-//Todo: Guards, Roles and Interceptors
+import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
+import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
+import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
+import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 /**
  * Die Controller-Klasse für die Verwaltung von Autos.
  */
 @Controller(paths.rest)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(ResponseTimeInterceptor)
 @ApiTags('Auto REST-API')
 @ApiBearerAuth()
 export class AutoWriteController {
@@ -70,6 +76,7 @@ export class AutoWriteController {
      * @returns Leeres Promise-Objekt.
      */
     @Post()
+    @RolesAllowed('admin', 'verkaeufer')
     @ApiOperation({ summary: 'Ein neues Auto anlegen' })
     @ApiCreatedResponse({ description: 'Erfolgreich neu angelegt' })
     @ApiBadRequestResponse({ description: 'Fehlerhafte Autodaten' })
@@ -112,6 +119,7 @@ export class AutoWriteController {
      * @returns Leeres Promise-Objekt.
      */
     @Put(':id')
+    @RolesAllowed('admin', 'verkaeufer')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({
         summary: 'Ein vorhandenes Auto aktualisieren',
@@ -169,6 +177,7 @@ export class AutoWriteController {
      * @returns Leeres Promise-Objekt.
      */
     @Delete(':id')
+    @RolesAllowed('admin')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Auto mit der ID löschen' })
     @ApiNoContentResponse({
