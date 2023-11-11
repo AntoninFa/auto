@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "4a15f451-991d-477d-aab5-86ee768798ee",
+		"name": "Admin",
+		"description": "Administrative Aufgaben, wie Abfragen zu Liveness und Readiness",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30032699",
+		"_collection_link": "https://interstellar-capsule-261130.postman.co/workspace/auto~a1e297ce-2ca2-421e-a490-735f773fa243/collection/30032699-4a15f451-991d-477d-aab5-86ee768798ee?action=share&source=collection_link&creator=30032699"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "Liveness",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check status', () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    const { status, info, error } = responseBody\r",
+									"    // if status field in the response is ok\r",
+									"    pm.expect(status).to.be.equal('ok');\r",
+									"    // if info.appserver.status field is up\r",
+									"    pm.expect(info.appserver.status).to.be.equal('up');\r",
+									"    // if error field is empty\r",
+									"    pm.expect(error).to.be.an('object').that.is.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{health_url}}/liveness",
+							"host": [
+								"{{health_url}}"
+							],
+							"path": [
+								"liveness"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Readiness",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Success', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Content-Type header is set to JSON.', () => {\r",
+									"    const contentType = pm.response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"\r",
+									"pm.test('Check status', () => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    const { status, info, error } = responseBody\r",
+									"    // if status field in the response is ok\r",
+									"    pm.expect(status).to.be.equal('ok');\r",
+									"    // if info.appserver.status field is up\r",
+									"    pm.expect(info.appserver.status).to.be.equal('up');\r",
+									"    // if error field is empty\r",
+									"    pm.expect(error).to.be.an('object').that.is.empty;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{health_url}}/readiness",
+							"host": [
+								"{{health_url}}"
+							],
+							"path": [
+								"readiness"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Abfragen zu Liveness und Readiness"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "health_url",
+			"value": "{{base_url}}/health",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "9682620e-a902-450f-bbc0-5283b1160d7c",
+		"name": "Dev",
+		"description": "Entwickler Aufgaben",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30032699",
+		"_collection_link": "https://interstellar-capsule-261130.postman.co/workspace/auto~a1e297ce-2ca2-421e-a490-735f773fa243/collection/30032699-9682620e-a902-450f-bbc0-5283b1160d7c?action=share&source=collection_link&creator=30032699"
+	},
+	"item": [
+		{
+			"name": "DB neu laden",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: 'https://localhost:3000/auth/login',\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/x-www-form-urlencoded'\r",
+							"    },\r",
+							"    body: 'username=admin&password=p',\r",
+							"}, (err, res) => pm.collectionVariables.set('TOKEN', res.json().token));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Success', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Content-Type header is set to JSON.', () => {\r",
+							"    const contentType = pm.response.headers.get('Content-Type');\r",
+							"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+							"});\r",
+							"\r",
+							"pm.test('Body mit \"success\"', () => {\r",
+							"    const body = pm.response.json();\r",
+							"    pm.expect(body.db_populate).to.be.equal('success');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/dev/db_populate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"dev",
+						"db_populate"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TOKEN",
+			"value": ""
+		}
+	]
+}
