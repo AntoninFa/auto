@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS ausstattung (
     verfügbar           boolean NOT NULL DEFAULT TRUE,
     auto_id             integer NOT NULL REFERENCES auto
 ) TABLESPACE autospace;
-CREATE INDEX IF NOT EXISTS ausstattung_auto_id_idx ON ausstattung(buch_id) TABLESPACE autospace;
+CREATE INDEX IF NOT EXISTS ausstattung_auto_id_idx ON ausstattung(auto_id) TABLESPACE autospace;
 
 CREATE TABLE IF NOT EXISTS eigentuemer (
     id                  integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY USING INDEX TABLESPACE autospace,
