@@ -84,5 +84,5 @@ export class AutoDTO extends AutoDtoOhneRef {
     @ValidateNested({ each: true })
     @Type(() => AusstattungDTO)
     @ApiProperty({ type: [AusstattungDTO] })
-    readonly ausstattung: AusstattungDTO[] | undefined;
+    readonly ausstattungen: AusstattungDTO[] | undefined;
 }

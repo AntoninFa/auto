@@ -198,7 +198,7 @@ export class AutoWriteController {
             fuehrerscheinnummer: eigentuemerDTO.fuehrerscheinnummer,
             auto: undefined,
         };
-        const ausstattungen = autoDTO.ausstattung?.map((ausstattungDTO) => {
+        const ausstattungen = autoDTO.ausstattungen?.map((ausstattungDTO) => {
             const ausstattung: Ausstattung = {
                 id: undefined,
                 bezeichnung: ausstattungDTO.bezeichnung,
