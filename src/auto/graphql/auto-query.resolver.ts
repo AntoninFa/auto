@@ -40,10 +40,10 @@ export class AutoQueryResolver {
     }
 
     @Query('autos')
-    async find(@Args() eigentuemer: { eigentuemer: string } | undefined) {
-        const eigentuemerStr = eigentuemer?.eigentuemer;
-        this.#logger.debug('find: Suchkriterium eigentuemer=%s', eigentuemerStr);
-        const suchkriterium = eigentuemerStr === undefined ? {} : { fin: eigentuemerStr };
+    async find(@Args() modellbezeichnung: { modellbezeichnung: string } | undefined) {
+        const modellbezeichnungStr = modellbezeichnung?.modellbezeichnung;
+        this.#logger.debug('find: Suchkriterium modellbezeichnung=%s', modellbezeichnungStr);
+        const suchkriterium = modellbezeichnungStr === undefined ? {} : { modellbezeichnung: modellbezeichnungStr };
 
         const autos = await this.#service.find(suchkriterium);
 
