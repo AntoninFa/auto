@@ -31,8 +31,8 @@
 --     docker compose up db
 -- (5) 2. PowerShell:
 --     docker compose exec db bash
---        psql --dbname=postgres --username=postgres --file=/sql/create-db-buch.sql
---        psql --dbname=buch --username=buch --file=/sql/create-schema-buch.sql
+--        psql --dbname=postgres --username=postgres --file=/sql/create-db-auto.sql
+--        psql --dbname=auto --username=auto --file=/sql/create-schema-auto.sql
 --        exit
 --      docker compose down
 

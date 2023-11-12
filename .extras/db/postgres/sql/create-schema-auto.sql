@@ -1,5 +1,5 @@
 
 -- "user-private schema" (Default-Schema: public)
-CREATE SCHEMA IF NOT EXISTS AUTHORIZATION buch;
+CREATE SCHEMA IF NOT EXISTS AUTHORIZATION auto;
 
-ALTER ROLE buch SET search_path = 'buch';
+ALTER ROLE auto SET search_path = 'auto';
