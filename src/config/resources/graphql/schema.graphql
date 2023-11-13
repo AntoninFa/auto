@@ -8,7 +8,7 @@ schema {
 
 "Funktionen, um Autodaten zu lesen"
 type Query {
-  autos(titel: String): [Auto!]
+  autos(eigentuemer: String): [Auto!]
 
   auto(id: ID!): Auto
 }
@@ -26,58 +26,72 @@ type Mutation {
 }
 
 "Daten zur Ausstattung eines Autos"
-type ausstattung {
+type Ausstattung {
   bezeichnung: String!
-  preis: number!
-  verfuegbar: boolean
+  preis: Float!
+  verfuegbar: Boolean
 }
 
 "Daten zum Eigentuemer eines Autos"
-type eigentuemer {
+type Eigentuemer {
   eigentuemer: String!
-  geburtsdatum: Date | String!
+  geburtsdatum: String!
   fuehrerscheinnummer: String
 }
 
 "Datenschema zu einem Auto, das gelesen wird"
 type Auto {
-  id: number!
-  version: number!
+  id: Int!
+  version: Int!
   modellbezeichnung: String!
   hersteller: HerstellerType
   fin: String
-  kilometerstand: number!
-  auslieferungstag: Date | String
-  grundpreis: number
-  istAktuellesModell: boolean
+  kilometerstand: Float!
+  auslieferungstag: String
+  grundpreis: Float!
+  istAktuellesModell: Boolean
   getriebeArt: GetriebeType
   # 1:1-Beziehung
   eigentuemer: Eigentuemer!
 }
 
-"Daten zum Titel eines neuen Autos"
-input TitelInput {
-  titel: String!
-  untertitel: String
+"Enum-Typ für das Getriebe eines Autos"
+enum GetriebeType {
+  MANUELL
+  AUTOMATIK
 }
 
-"Daten zu den Abbildungen eines Autos"
-input AbbildungInput {
-  beschriftung: String!
-  contentType: String!
+"Enum-Typ für den Hersteller eines Autos"
+enum HerstellerType {
+  VOLKSWAGEN
+  AUDI 
+  DAIMLER 
+  RENAULT
+}
+
+"Daten zum Eigentuemer eines Autos"
+input EigentuemerInput {
+  eigentuemer: String!
+  geburtsdatum: String!
+  fuehrerscheinnummer: String!
+}
+
+"Daten zu der Ausstattung eines Autos"
+input AusstattungInput {
+  bezeichnung: String!
+  preis: Float!
+  verfuegbar: Boolean
 }
 
 "Daten für ein neues Autos"
-input BuchInput {
-  id: number!
-  version: number!
-  modellbezeichnung: String!
+input AutoInput {
+  modellbezeichnung: String
   hersteller: HerstellerType
   fin: String
-  kilometerstand: number!
-  auslieferungstag: Date | String
-  grundpreis: number
-  istAktuellesModell: boolean
+  kilometerstand: Float
+  auslieferungstag: String
+  grundpreis: Float
+  istAktuellesModell: Boolean
   getriebeArt: GetriebeType
   eigentuemer: EigentuemerInput!
   ausstattung: AusstattungInput!
@@ -89,16 +103,15 @@ type CreatePayload {
 
 "Daten für ein zu änderndes Autos"
 input AutoUpdateInput {
-  id: number
+  id: Int
   version: Int
-  version: number!
-  modellbezeichnung: String!
+  modellbezeichnung: String
   hersteller: HerstellerType
   fin: String
-  kilometerstand: number!
-  auslieferungstag: Date | String
-  grundpreis: number
-  istAktuellesModell: boolean
+  kilometerstand: Float
+  auslieferungstag: String
+  grundpreis: Float
+  istAktuellesModell: Boolean
 }
 
 type UpdatePayload {
