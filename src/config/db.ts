@@ -7,7 +7,6 @@ import { Auto } from '../auto/entity/auto.entity.js';
 import { type DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { type TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { dbType } from './dbtype.js';
 import { entities } from '../auto/entity/entities.js';
 import { loggerDefaultValue } from './logger.js';
 import { nodeConfig } from './node.js';
@@ -31,7 +30,7 @@ const logging =
     !loggerDefaultValue;
 const logger = 'advanced-console';
 
-export const dbResourcesDir = resolve(nodeConfig.resourcesDir, 'db', dbType);
+export const dbResourcesDir = resolve(nodeConfig.resourcesDir, 'db', 'postgres');
 
 export let typeOrmModuleOptions: TypeOrmModuleOptions;
     {
