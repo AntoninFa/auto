@@ -1,4 +1,4 @@
-id;bezeichnung;preis;verfügbar
+id;bezeichnung;preis;verfuegbar
 1;'Sitzheitzung';11.1;true
 3;'Klima';22.2;true
 10;'Beleuchtung';25.2;false

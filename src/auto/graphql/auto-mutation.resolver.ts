@@ -68,7 +68,7 @@ export class AutoMutationResolver {
                 id: undefined,
                 bezeichnung: ausstattungDTO.bezeichnung,
                 preis: ausstattungDTO.preis,
-                verfügbar: ausstattungDTO.verfügbar,
+                verfuegbar: ausstattungDTO.verfuegbar,
                 auto: undefined,
             };
             return ausstattung;

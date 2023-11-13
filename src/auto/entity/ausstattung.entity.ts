@@ -41,11 +41,11 @@ export class Ausstattung {
     readonly preis!: number; 
 
     /**
-     * Boolean Abfrage, ob ein Ausstattungsstück verfügbar ist.
+     * Boolean Abfrage, ob ein Ausstattungsstück verfuegbar ist.
      */
     @Column('boolean')
     @ApiProperty({ example: true, type: Boolean })
-    readonly verfügbar: boolean | undefined;
+    readonly verfuegbar: boolean | undefined;
 
     /**
      * 1:n Beziehung zu Ausstattung. 
@@ -59,6 +59,6 @@ export class Ausstattung {
         id: this.id,
         bezeichnung: this.bezeichnung,
         preis: this.preis,
-        verfügbar: this.verfügbar
+        verfuegbar: this.verfuegbar
     });
 }

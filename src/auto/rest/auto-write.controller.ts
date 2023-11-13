@@ -203,7 +203,7 @@ export class AutoWriteController {
                 id: undefined,
                 bezeichnung: ausstattungDTO.bezeichnung,
                 preis: ausstattungDTO.preis,
-                verfügbar: ausstattungDTO.verfügbar,
+                verfuegbar: ausstattungDTO.verfuegbar,
                 auto: undefined,
             };
             return ausstattung;

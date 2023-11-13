@@ -1222,7 +1222,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"modellbezeichnung\": \"Golf\",\r\n  \"hersteller\": \"VOLKSWAGEN\",\r\n  \"fin\": \"5AXKR0C53K0Y01269\",\r\n  \"kilometerstand\": 101,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"MANUELL\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"Karl Heinz\",\r\n    \"geburtsdatum\": \"1980-05-15\",\r\n    \"fuehrerscheinnummer\": \"HKA321\"\r\n  },\r\n  \"ausstattung\": [{\r\n    \"bezeichnung\": \"Sitzheitzung\",\r\n    \"preis\": 22.2, \r\n    \"verfügbar\": true\r\n  }]\r\n}",
+							"raw": "{\r\n  \"modellbezeichnung\": \"Golf\",\r\n  \"hersteller\": \"VOLKSWAGEN\",\r\n  \"fin\": \"5AXKR0C53K0Y01269\",\r\n  \"kilometerstand\": 101,\r\n  \"auslieferungstag\": \"2022-01-01\",\r\n  \"grundpreis\": 250000.0,\r\n  \"istAktuellesModell\": true,\r\n  \"getriebeArt\": \"MANUELL\",\r\n  \"eigentuemer\": {\r\n    \"eigentuemer\": \"Karl Heinz\",\r\n    \"geburtsdatum\": \"1980-05-15\",\r\n    \"fuehrerscheinnummer\": \"HKA321\"\r\n  },\r\n  \"ausstattung\": [{\r\n    \"bezeichnung\": \"Sitzheitzung\",\r\n    \"preis\": 22.2, \r\n    \"verfuegbar\": true\r\n  }]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

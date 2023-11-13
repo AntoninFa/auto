@@ -18,5 +18,5 @@ export class AusstattungDTO {
     readonly preis!: number; 
 
     @ApiProperty({ example: true, type: Boolean })
-    readonly verfügbar!: boolean;
+    readonly verfuegbar!: boolean;
 }
