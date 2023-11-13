@@ -1,0 +1,112 @@
+
+# siehe app.module.ts
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"Funktionen, um Autodaten zu lesen"
+type Query {
+  autos(titel: String): [Auto!]
+
+  auto(id: ID!): Auto
+}
+
+"Funktionen, um Autos neu anzulegen, zu aktualisieren oder zu löschen"
+type Mutation {
+  create(input: AutoInput!): CreatePayload
+
+  update(input: AutoUpdateInput!): UpdatePayload
+
+  delete(id: ID!): Boolean
+
+  # Mutation, weil z.B. der Login-Zeitpunkt im IDM-System gespeichert wird
+  login(username: String!, password: String!): LoginResult
+}
+
+"Daten zur Ausstattung eines Autos"
+type ausstattung {
+  bezeichnung: String!
+  preis: number!
+  verfuegbar: boolean
+}
+
+"Daten zum Eigentuemer eines Autos"
+type eigentuemer {
+  eigentuemer: String!
+  geburtsdatum: Date | String!
+  fuehrerscheinnummer: String
+}
+
+"Datenschema zu einem Auto, das gelesen wird"
+type Auto {
+  id: number!
+  version: number!
+  modellbezeichnung: String!
+  hersteller: HerstellerType
+  fin: String
+  kilometerstand: number!
+  auslieferungstag: Date | String
+  grundpreis: number
+  istAktuellesModell: boolean
+  getriebeArt: GetriebeType
+  # 1:1-Beziehung
+  eigentuemer: Eigentuemer!
+}
+
+"Daten zum Titel eines neuen Autos"
+input TitelInput {
+  titel: String!
+  untertitel: String
+}
+
+"Daten zu den Abbildungen eines Autos"
+input AbbildungInput {
+  beschriftung: String!
+  contentType: String!
+}
+
+"Daten für ein neues Autos"
+input BuchInput {
+  id: number!
+  version: number!
+  modellbezeichnung: String!
+  hersteller: HerstellerType
+  fin: String
+  kilometerstand: number!
+  auslieferungstag: Date | String
+  grundpreis: number
+  istAktuellesModell: boolean
+  getriebeArt: GetriebeType
+  eigentuemer: EigentuemerInput!
+  ausstattung: AusstattungInput!
+}
+
+type CreatePayload {
+  id: Int
+}
+
+"Daten für ein zu änderndes Autos"
+input AutoUpdateInput {
+  id: number
+  version: Int
+  version: number!
+  modellbezeichnung: String!
+  hersteller: HerstellerType
+  fin: String
+  kilometerstand: number!
+  auslieferungstag: Date | String
+  grundpreis: number
+  istAktuellesModell: boolean
+}
+
+type UpdatePayload {
+  version: Int
+}
+
+type LoginResult {
+  token: String!
+  expiresIn: String!
+  roles: [String]!
+}
