@@ -1,0 +1,79 @@
+# Aufruf:   docker compose up
+#           docker compose exec jenkins bash
+#               cat /etc/os-release
+#                   ID=debian
+#                   VERSION="12 (bookworm)"
+#           docker compose exec jenkins-docker ash
+#           docker compose down
+
+# https://www.jenkins.io/doc/tutorials/build-a-node-js-and-react-app-with-npm
+
+services:
+  # https://github.com/compose-spec/compose-spec/blob/master/spec.md#compose-file
+  # https://github.com/compose-spec/compose-spec/blob/master/spec.md#services-top-level-element
+  # https://docs.docker.com/compose/compose-file
+  # https://docs.docker.com/compose/compose-file/compose-file-v3
+  jenkins-docker:
+    image: docker:24.0.6-dind
+    ports:
+      - published: 3000
+        target: 3000
+      - published: 5000
+        target: 5000
+      - published: 2376
+        target: 2376
+    networks:
+      jenkins-network:
+        # alternative hostnames im virtuellen Netzwerk
+        aliases: [docker]
+    volumes:
+      - type: bind
+        source: C:/Zimmermann/volumes/jenkins/certs
+        target: /certs/client
+      - type: bind
+        source: C:/Zimmermann/volumes/jenkins/data
+        target: /var/jenkins_home
+    privileged: true
+    env_file: jenkins-docker.env
+    container_name: jenkins-docker
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 4G
+
+  jenkins:
+    image: juergenzimmermann/jenkins:2023.10.0
+    ports:
+      - published: 7070
+        target: 8080
+      - published: 50000
+        target: 50000
+    networks: [jenkins-network]
+    volumes:
+      - type: bind
+        # /var/jenkins_home/workspace enthaelt das Verzeichnis "auto"
+        source: C:/Zimmermann/volumes/jenkins/data
+        target: /var/jenkins_home
+      - type: bind
+        source: C:/Zimmermann/volumes/jenkins/certs
+        target: /certs/client
+        read_only: true
+    env_file: jenkins.env
+    user: 'jenkins:jenkins'
+    container_name: jenkins
+    hostname: jenkins
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 4G
+
+networks:
+  jenkins-network: {}
