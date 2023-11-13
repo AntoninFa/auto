@@ -1,5 +1,5 @@
-id;eigentuemer;geburtsdatum;fuehrerscheinnummer
-1;Max Rimmelspacher;1980-05-15;ABC123
-2;Anna Schmidt;1995-02-28;XYZ456
-3;Mark Müller;1988-09-10;DEF789
-4;Sabiene Moritz;1975-12-03;GHI012
+id;eigentuemer;geburtsdatum;fuehrerscheinnummer;auto_id
+1;Max Rimmelspacher;1980-05-15;ABC123;1
+2;Anna Schmidt;1995-02-28;XYZ456;2
+3;Mark Müller;1988-09-10;DEF789;5
+4;Sabiene Moritz;1975-12-03;GHI012;6
