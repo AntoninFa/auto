@@ -1,14 +1,14 @@
 /**
  * Klasse Query-Builder ermöglicht die Abfrage von Autos. 
  */
-import {Auto} from '../entity/auto.entity';
+import {Auto} from '../entity/auto.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { type Suchkriterien } from './auto-read.service.js';
 import { Repository, SelectQueryBuilder } from 'typeorm';
-import { getLogger } from '../../logger/logger';
+import { getLogger } from '../../logger/logger.js';
 
 /**
  * Typdefinition für die Autosuche. 
@@ -87,28 +87,6 @@ export class QueryBuilder {
         queryBuilder.innerJoinAndSelect(`${this.#autoAlias}.`, 'eigentuemer');
 
         let useWhere: boolean = true; 
-
-        if (javascript === 'true') {
-            queryBuilder = useWhere
-                ? queryBuilder.where(
-                      `${this.#autoAlias}.schlagwoerter like '%JAVASCRIPT%'`,
-                  )
-                : queryBuilder.andWhere(
-                      `${this.#autoAlias}.schlagwoerter like '%JAVASCRIPT%'`,
-                  );
-            useWhere = false;
-        }
-
-        if (typescript === 'true') {
-            queryBuilder = useWhere
-                ? queryBuilder.where(
-                      `${this.#autoAlias}.schlagwoerter like '%TYPESCRIPT%'`,
-                  )
-                : queryBuilder.andWhere(
-                      `${this.#autoAlias}.schlagwoerter like '%TYPESCRIPT%'`,
-                  );
-            useWhere = false;
-        }
 
         // Restliche Properties als Key-Value-Paare: Vergleiche auf Gleichheit
         Object.keys(props).forEach((key) => {
