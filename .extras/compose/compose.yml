@@ -17,7 +17,6 @@
 # https://docs.docker.com/compose/compose-file/14-include
 include:
   - path: ./db/postgres/compose.yml
-  #- path: ./db/mysql/compose.yml
   - path: ./fakesmtp/compose.yml
 
 # https://docs.docker.com/compose/compose-file/05-services

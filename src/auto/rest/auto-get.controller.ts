@@ -13,7 +13,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import {HerstellerType, Auto, type GetriebeType} from '../../auto/entity/auto.entity';
+import {HerstellerType, Auto, type GetriebeType} from '../../auto/entity/auto.entity.js';
 import {
     AutoReadService,
     type Suchkriterien,
@@ -32,8 +32,8 @@ import {
 import { Request, Response } from 'express';
 import { paths } from '../../config/paths.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { Eigentuemer } from '../entity/eigentuemer.entity';
-import { getLogger } from '../../logger/logger';
+import { Eigentuemer } from '../entity/eigentuemer.entity.js';
+import { getLogger } from '../../logger/logger.js';
 import { getBaseUri } from './getBaseUri.js';
 
 /**href-Link für HATEOS */

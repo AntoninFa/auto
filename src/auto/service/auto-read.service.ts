@@ -6,10 +6,10 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import RE2 from 're2';
-import { Auto, GetriebeType, HerstellerType } from '../entity/auto.entity';
-import { Eigentuemer } from '../entity/eigentuemer.entity';
-import { Ausstattung } from '../entity/ausstattung.entity';
-import { getLogger } from '../../logger/logger';
+import { Auto, GetriebeType, HerstellerType } from '../entity/auto.entity.js';
+import { Eigentuemer } from '../entity/eigentuemer.entity.js';
+import { Ausstattung } from '../entity/ausstattung.entity.js';
+import { getLogger } from '../../logger/logger.js';
 import { QueryBuilder } from './query-builder.js';
 
 /**
