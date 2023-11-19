@@ -12,6 +12,7 @@ import {
     IsOptional,
     IsPositive,
     IsString,
+    MaxLength,
     Length,
     Matches,
     Min,
@@ -31,7 +32,7 @@ import { Type } from 'class-transformer';
  */
 export class AutoDtoOhneRef {
     @IsString()
-    @Length(40)
+    @MaxLength(40)
     @ApiProperty({ example: 'Mustang' })
     readonly modellbezeichnung!: string;
 
@@ -42,7 +43,7 @@ export class AutoDtoOhneRef {
 
     @IsString()
     @IsAlphanumeric()
-    @Length(17, 17)
+    @Length(17)
     @ApiProperty({ example: '1HGCM82633A400195' })
     readonly fin!: string;
 
