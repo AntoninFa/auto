@@ -145,7 +145,7 @@ export class AutoGetController {
  * @param res Leeres Response Objekt von Express
  * @returns Leeres Promise Objekt
  */
-    @Get('id')
+    @Get(':id')
     @ApiOperation({summary: 'Suche mit der Auto-ID'})
     @ApiParam({
         name: 'id',
@@ -234,7 +234,7 @@ export class AutoGetController {
         const autosModel = autos.map((auto:Auto): AutoModel =>
             this.#toModel(auto, req, false),
         );
-        this.#logger.debug('get: buecherModel=%o', autosModel);
+        this.#logger.debug('get: autoModel=%o', autosModel);
 
         const result: AutosModel = { _embedded: { autos: autosModel } };
         return res.contentType(APPLICATION_HAL_JSON).json(result).send();
