@@ -107,12 +107,6 @@ export class AutoQuery implements Suchkriterien {
     declare readonly getriebeArt: GetriebeType;
 
     @ApiProperty({ required: false })
-    declare readonly javascript: string;
-
-    @ApiProperty({ required: false })
-    declare readonly typescript: string;
-
-    @ApiProperty({ required: false })
     declare readonly eigentuemer: Eigentuemer;
 }
 

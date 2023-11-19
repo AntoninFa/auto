@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS auto (
     kilometerstand      integer NOT NULL CHECK (kilometerstand >= 0),
     auslieferungstag    date,
     grundpreis          decimal(8,2) NOT NULL,
-    istAktuellesModell  boolean NOT NULL DEFAULT TRUE,
-    getriebeArt             getriebeType,
+    ist_aktuelles_modell  boolean NOT NULL DEFAULT TRUE,
+    getriebe_art             getriebeType,
     erzeugt             timestamp NOT NULL DEFAULT NOW(),
     aktualisiert        timestamp NOT NULL DEFAULT NOW()
 ) TABLESPACE autospace;

@@ -7,10 +7,10 @@ import { Injectable } from '@nestjs/common';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { type Suchkriterien } from './auto-read.service.js';
-import { Repository, SelectQueryBuilder } from 'typeorm';
+import { Repository} from 'typeorm';
 import { getLogger } from '../../logger/logger.js';
 
-/**
+/** 
  * Typdefinition für die Autosuche. 
  */
 export interface BuildIdParams {
@@ -51,7 +51,7 @@ export class QueryBuilder {
      * @param id ID des gesuchten Autos
      * @returns QueryBuilder
      */
-    buildId({ id, mitAusstattung = false}: BuildIdParams): SelectQueryBuilder<Auto> {
+    buildId({ id, mitAusstattung = false}: BuildIdParams)  {
         const queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
         queryBuilder.innerJoinAndSelect(
             `${this.#autoAlias}.eigentuemer`, 
@@ -73,38 +73,50 @@ export class QueryBuilder {
      * @param suchkriterien JSON-Objekt mit den Suchkriterien 
      * @returns Querybuilder
      */
-    build({ eigentuemer, ausstattung, javascript, typescript, ...props }: Suchkriterien) {
-        this.#logger.debug(
-            'build: eigentuemer=%s, ausstattung=%s, javascript=%s, typescript=%s, props=%o',
-            eigentuemer, 
-            ausstattung, 
-            javascript,
-            typescript,
-            props,
+    /**
+ * Autos asynchron suchen
+ * @param suchkriterien JSON-Objekt mit den Suchkriterien 
+ * @returns Querybuilder
+ */
+build({ eigentuemer, ausstattung, ...props }: Suchkriterien) {
+    this.#logger.debug(
+        'build: eigentuemer=%s, ausstattung=%s, props=%o',
+        eigentuemer, 
+        ausstattung, 
+        props,
+    );
+
+    let queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
+    queryBuilder.innerJoinAndSelect(`${this.#autoAlias}.eigentuemer`, 'eigentuemer');
+
+    let useWhere = true;
+    if (eigentuemer !== undefined && typeof eigentuemer === 'string') {
+        const ilike ='ilike';
+        queryBuilder = queryBuilder.where(
+            `${this.#eigentuemerAlias}.eigentuemer ${ilike} :eigentuemer`,
+            { eigentuemer: `%${eigentuemer}%` },
         );
-
-        let queryBuilder = this.#repo.createQueryBuilder(this.#autoAlias);
-        queryBuilder.innerJoinAndSelect(`${this.#autoAlias}.`, 'eigentuemer');
-
-        let useWhere: boolean = true; 
-
-        // Restliche Properties als Key-Value-Paare: Vergleiche auf Gleichheit
-        Object.keys(props).forEach((key) => {
-            const param: Record<string, any> = {};
-            param[key] = (props as Record<string, any>)[key];
-            queryBuilder = useWhere
-                ? queryBuilder.where(
-                      `${this.#autoAlias}.${key} = :${key}`,
-                      param,
-                  )
-                : queryBuilder.andWhere(
-                      `${this.#autoAlias}.${key} = :${key}`,
-                      param,
-                  );
-            useWhere = false;
-        });
-
-        this.#logger.debug('build: sql=%s', queryBuilder.getSql());
-        return queryBuilder;
+        useWhere = false;
     }
+    
+
+    Object.keys(props).forEach((key) => {
+        const param: Record<string, any> = {};
+        param[key] = (props as Record<string, any>)[key];
+        queryBuilder = useWhere
+            ? queryBuilder.where(
+                  `${this.#autoAlias}.${key} = :${key}`,
+                  param,
+              )
+            : queryBuilder.andWhere(
+                  `${this.#autoAlias}.${key} = :${key}`,
+                  param,
+              );
+        useWhere = false;
+    });
+
+    this.#logger.debug('build: sql=%s', queryBuilder.getSql());
+    return queryBuilder;
+}
+
 }

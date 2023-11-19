@@ -34,8 +34,6 @@ export interface Suchkriterien {
     readonly getriebeArt?: GetriebeType;
     readonly eigentuemer?: Eigentuemer; 
     readonly ausstattung?: Ausstattung; 
-    readonly javascript?: string;
-    readonly typescript?: string;
 }
 
 /**
@@ -121,11 +119,7 @@ export class AutoReadService {
     #checkKeys(keys: string[]) {
         let validKeys = true;
         keys.forEach((key) => {
-            if (
-                !this.#autoProps.includes(key) &&
-                key !== 'javascript' &&
-                key !== 'typescript'
-            ) {
+            if (!this.#autoProps.includes(key)) {
                 this.#logger.debug(
                     '#find: ungueltiges Suchkriterium "%s"',
                     key,
@@ -133,7 +127,6 @@ export class AutoReadService {
                 validKeys = false;
             }
         });
-
         return validKeys;
     }
 }
