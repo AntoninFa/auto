@@ -2,6 +2,8 @@
 # compilierter Output
 /dist
 
+/log
+
 # von npm Abhängige Dateien
 /node_modules
 
