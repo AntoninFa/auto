@@ -17,7 +17,6 @@ import { type DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AutoReadService } from './auto-read.service.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
-import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { MailService } from '../../mail/mail.service.js';
 
 /**
@@ -165,21 +164,17 @@ export class AutoWriteService {
      * @param id ID des zu löschenden Autos.
      * @returns true, bei erfolgreichem löschen. Sonst false.
      */
-    async delete(id: number): Promise<boolean> {
+    async delete(id: number) {
         this.#logger.debug('delete: id: %d', id);
         const auto = await this.#readService.findById({
             id,
-            mitAusstattung: true,
+            mitAusstattung: false,
         });
         let deleteResult: DeleteResult | undefined;
         await this.#repo.manager.transaction(async (transactionalMgr) => {
             const eigentuemerID = auto.eigentuemer?.id;
             if (eigentuemerID !== undefined) {
                 await transactionalMgr.delete(Eigentuemer, eigentuemerID);
-            }
-            const ausstattungen = auto.ausstattungen ?? [];
-            for (const ausstattung of ausstattungen) {
-                await transactionalMgr.delete(Ausstattung, ausstattung.id);
             }
             deleteResult = await transactionalMgr.delete(Auto, id);
             this.#logger.debug('delete: deleteResult=%o', deleteResult);

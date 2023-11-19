@@ -3,5 +3,5 @@ id;bezeichnung;preis;verfuegbar; auto_id
 3;'Klima';22.2;true;2
 10;'Beleuchtung';25.2;false;5
 15;'Getränkehalter';59.9;false;6
-80;'Navi'; 60.5;true;8
+80;'Navi'; 60.5;true;1
 99;'Panoramadach';3.4;false;1
