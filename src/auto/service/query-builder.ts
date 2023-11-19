@@ -80,9 +80,8 @@ export class QueryBuilder {
  */
 build({ eigentuemer, ausstattung, ...props }: Suchkriterien) {
     this.#logger.debug(
-        'build: eigentuemer=%s, ausstattung=%s, props=%o',
+        'build: eigentuemer=%s, props=%o',
         eigentuemer, 
-        ausstattung, 
         props,
     );
 
