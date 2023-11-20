@@ -30,19 +30,11 @@ const setupSwagger = (app: INestApplication) => {
 };
 
 const bootstrap = async () => {
-<<<<<<< HEAD
-    const app = await NestFactory.create(AppModule, { httpsOptions }); // "Shorthand Properties" ab ES 2015
-=======
     const app = await NestFactory.create(AppModule, { httpsOptions });
->>>>>>> 92fb94b1937e75e7d77dfecf7980877572b9f581
     app.use(helmetHandlers, compression());
     app.useGlobalPipes(new ValidationPipe());
     setupSwagger(app);
     app.enableCors(corsOptions);
     await app.listen(port);
 };
-<<<<<<< HEAD
-
-=======
->>>>>>> 92fb94b1937e75e7d77dfecf7980877572b9f581
 await bootstrap();
