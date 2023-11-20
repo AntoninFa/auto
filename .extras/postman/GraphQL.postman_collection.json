@@ -444,9 +444,388 @@
 				}
 			],
 			"description": "Login mit der GraphQL-Schnittstelle"
+		},
+		{
+			"name": "Mutation",
+			"item": [
+				{
+					"name": "Neues Auto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Statuscode 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type application/json', () => {\r",
+									"    const { response } = pm;\r",
+									"    const contentType = response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Body mit den Properties', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { data } = body;\r",
+									"    pm.expect(data.create.id).to.be.a('number').that.is.gte(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  create(\r\n    input: {\r\n  fin: \"1HGCM82633A123456\",\r\n       modellbezeichnung: \"Golf\",\r\n   hersteller: \"VOLKSWAGEN\",\r\n      kilometerstand: 10,\r\n      auslieferungstag: \"2022-01-01\",\r\n      grundpreis: 20000.5,\r\n      istAktuellesModell: true,\r\n      getriebeArt: \"MANUELL\",\r\n      erzeugt: \"2022-02-01 00:00:00\",\r\n      aktualisiert: \"2022-02-01 00:00:00\",\r\n      },\r\n     eigentuemer: \"Eigentuemercreatemutation\",\r\n        geburtsdatum: \"1980-05-15\"\r\n     fuehrerscheinnummer: \"ABC123\"\r\n    },\r\n       ausstttung: [{\r\n        bezeichnung: \"Klima\",\r\n        verfuegbar: true,\r\n      }]\r\n    }\r\n  ) {\r\n      id\r\n  }\r\n}",
+								"variables": "" 
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Neues Auto mit ungültigen Daten",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Statuscode 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type application/json', () => {\r",
+									"    const { response } = pm;\r",
+									"    const contentType = response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Fehlermeldungen im Response Body', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { errors } = body;\r",
+									"    pm.expect(errors).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    const { message, path, extensions } = errors[0];\r",
+									"    pm.expect(message).to.be.a('string');\r",
+									"    const props = ['eigentuemer.eigentuemer', 'fin', 'moedellbezeichnung', 'grundpreis', 'erzeugt', 'aktualisiert'];\r",
+									"    props.forEach(prop => pm.expect(message).to.include(prop));\r",
+									"    pm.expect(path).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    pm.expect(path[0]).to.be.equal('create');\r",
+									"    pm.expect(extensions.code).to.be.equal('BAD_USER_INPUT');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  create(\r\n    input: {\r\n   fin: \"falsche-fin\",\r\n    modellbezeichnung: \"Golf\",\r\n    grundpreis: 20000.5,\r\n   erzeugt: \"2022-02-01 00:00:00\",\r\n      aktualisiert: \"2022-02-01 00:00:00\",\r\n      },\r\n    eigentuemer: \"?!\"\r\n        geburtsdatum: \"1980-05-15\"\r\n   }\r\n    }\r\n  ) {\r\n      id\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auto mit ID 1 aktualisieren",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Statuscode 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type application/json', () => {\r",
+									"    const { response } = pm;\r",
+									"    const contentType = response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Body mit aktualisierter Versionsnummer', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { data } = body;\r",
+									"    pm.expect(data.update.version).to.be.a('number').that.is.gte(0);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  create(\r\n    input: {\r\n   id: \"1\",\r\n      version: 0,\r\n      fin: \"falsche-fin\",\r\n    modellbezeichnung: \"Golf\",\r\n    grundpreis: 20000.5,\r\n   erzeugt: \"2022-02-01 00:00:00\",\r\n      aktualisiert: \"2022-02-01 00:00:00\",\r\n      },\r\n    eigentuemer: \"?!\"\r\n        geburtsdatum: \"1980-05-15\"\r\n   }\r\n    }\r\n  ) {\r\n      version\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auto mit ID 1 mit ungültigen Daten aktualisieren",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Statuscode 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type application/json', () => {\r",
+									"    const { response } = pm;\r",
+									"    const contentType = response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Fehlermeldungen im Response Body', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { errors } = body;\r",
+									"    pm.expect(errors).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    const { message, path, extensions } = errors[0];\r",
+									"    pm.expect(message).to.be.a('string');\r",
+									"    const props = ['fin', 'grundpreis', 'auslieferungstag', 'getriebeArt'];\r",
+									"    props.forEach(prop => pm.expect(message).to.include(prop));\r",
+									"    pm.expect(path).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    pm.expect(path[0]).to.be.equal('update');\r",
+									"    pm.expect(extensions.code).to.be.equal('BAD_USER_INPUT');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  create(\r\n    input: {\r\n   id: \"1\",\r\n      version: 0,\r\n      fin: \"falsche-fin\",\r\n    modellbezeichnung: \"Golf\",\r\n    grundpreis: 20000.5,\r\n   erzeugt: \"2022-02-01 00:00:00\",\r\n      aktualisiert: \"2022-02-01 00:00:00\",\r\n      },\r\n    eigentuemer: \"?!\"\r\n        geburtsdatum: \"1980-05-15\"\r\n   }\r\n  ) {\r\n      version\r\n  }\r\n}",
+
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nicht-Vorhandenes Auto aktualisieren",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Statuscode 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type application/json', () => {\r",
+									"    const { response } = pm;\r",
+									"    const contentType = response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Fehlermeldungen im Response Body', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { errors } = body;\r",
+									"    pm.expect(errors).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    const { message, path, extensions } = errors[0];\r",
+									"    pm.expect(message).to.be.a('string').that.includes('999999');\r",
+									"    pm.expect(path).to.be.an('array').that.has.a.lengthOf(1);\r",
+									"    pm.expect(path[0]).to.be.equal('update');\r",
+									"    pm.expect(extensions.code).to.be.equal('BAD_USER_INPUT');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  create(\r\n    input: {\r\n   id: \"555\",\r\n      version: 0,\r\n      fin: \"WAUQQS54FA098123\",\r\n    modellbezeichnung: \"Q6\",\r\n      hersteller: \"AUDI\",\r\n       grundpreis: 20000.5,\r\n  istAktuellesModell: true,\r\n getriebeArt: \"MANUELL\",\r\n  erzeugt: \"2022-02-01 00:00:00\",\r\n      aktualisiert: \"2022-02-01 00:00:00\",\r\n      },\r\n     ) {\r\n      version\r\n  }\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auto mit ID 5 löschen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Statuscode 200', () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test('Content-Type application/json', () => {\r",
+									"    const { response } = pm;\r",
+									"    const contentType = response.headers.get('Content-Type');\r",
+									"    pm.expect(contentType).to.match(/^application\\/json(; charset=utf-8)?/u);\r",
+									"});\r",
+									"pm.test('Body mit den Properties', () => {\r",
+									"    const body = pm.response.json();\r",
+									"    const { data } = body;\r",
+									"    pm.expect(data.delete).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\r\n  delete(id: \"5\")\r\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{graphql_url}}",
+							"host": [
+								"{{graphql_url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Neuanlegen, Ändern und Löschen mit der GraphQL-Schnittstelle",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: 'https://localhost:3000/graphql',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json',",
+							"    },",
+							"    body: JSON.stringify({",
+							"        query: `",
+							"            mutation {",
+							"                login(username: \"admin\", password: \"p\") {",
+							"                    token",
+							"                }",
+							"            }",
+							"        `",
+							"    })",
+							"}, (err, res) => {",
+							"    pm.collectionVariables.set('TOKEN', res.json().data.login.token);",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
-	],
-	"event": [
+		],
+		"event": [
 		{
 			"listen": "prerequest",
 			"script": {
@@ -465,8 +844,8 @@
 				]
 			}
 		}
-	],
-	"variable": [
+		],
+		"variable": [
 		{
 			"key": "graphql_url",
 			"value": "{{base_url}}/graphql",
