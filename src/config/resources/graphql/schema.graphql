@@ -94,7 +94,7 @@ input AutoInput {
   istAktuellesModell: Boolean
   getriebeArt: GetriebeType
   eigentuemer: EigentuemerInput!
-  ausstattung: AusstattungInput!
+  ausstattung: [AusstattungInput!]
 }
 
 type CreatePayload {
