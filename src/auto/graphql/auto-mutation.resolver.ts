@@ -54,6 +54,24 @@ export class AutoMutationResolver {
         return payload;
     }
 
+    @Mutation()
+    @RolesAllowed('admin', 'verkaeufer')
+    async update(@Args('input') autoDTO: AutoUpdateDTO) {
+        this.#logger.debug('update: auto=%o', autoDTO);
+
+        const auto = this.#updateAutoDtoToAuto(autoDTO);
+        const versionStr = `"${autoDTO.version.toString()}"`;
+
+        const versionResult = await this.#service.update({
+            id: Number.parseInt(autoDTO.id, 10),
+            auto,
+            version: versionStr,
+        });
+        this.#logger.debug('updateAuto: versionResult=%d', versionResult);
+        const payload: UpdatePayload = { version: versionResult };
+        return payload;
+    }
+
     #autoDtoToAuto(autoDTO: AutoDTO): Auto {
         const eigentuemerDTO = autoDTO.eigentuemer; 
         const eigentuemer: Eigentuemer = {
@@ -92,5 +110,24 @@ export class AutoMutationResolver {
 
         auto.eigentuemer!.auto = auto;
         return auto;
+    }
+
+    #updateAutoDtoToAuto(autoDTO: AutoUpdateDTO): Auto{
+        return {
+            id: undefined,
+            version: undefined,
+            fin: autoDTO.fin,
+            modellbezeichnung: autoDTO.modellbezeichnung,
+            hersteller: autoDTO.hersteller,
+            kilometerstand: autoDTO.kilometerstand,
+            auslieferungstag: autoDTO.auslieferungstag,
+            grundpreis: autoDTO.grundpreis,
+            istAktuellesModell: autoDTO.istAktuellesModell,
+            getriebeArt: autoDTO.getriebeArt,
+            eigentuemer: undefined,
+            ausstattungen: undefined,
+            erzeugt: undefined,
+            aktualisiert: undefined,
+        };
     }
 }
