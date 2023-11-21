@@ -7,6 +7,7 @@ import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { AutoDTO } from '../rest/autoDTO.entity.js';
 import { AutoWriteService } from '../service/auto-write.service.js';
 import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';
+import { IdInput } from './auto-query.resolver.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGraphQlGuard } from '../../security/auth/roles/roles-graphql.guard.js';
@@ -70,6 +71,16 @@ export class AutoMutationResolver {
         this.#logger.debug('updateAuto: versionResult=%d', versionResult);
         const payload: UpdatePayload = { version: versionResult };
         return payload;
+    }
+
+    @Mutation()
+    @RolesAllowed('admin')
+    async delete(@Args() id: IdInput) {
+        const idStr = id.id;
+        this.#logger.debug('delete: id=%s', idStr);
+        const result = await this.#service.delete(idStr);
+        this.#logger.debug('deleteAuto: result=%s', result);
+        return result;
     }
 
     #autoDtoToAuto(autoDTO: AutoDTO): Auto {
