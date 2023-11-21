@@ -107,7 +107,7 @@ export class AutoQuery implements Suchkriterien {
     declare readonly getriebeArt: GetriebeType;
 
     @ApiProperty({ required: false })
-    declare readonly eigentuemer: Eigentuemer;
+    declare readonly eigentuemer: string;
 }
 
 const APPLICATION_HAL_JSON = 'application/hal+json';

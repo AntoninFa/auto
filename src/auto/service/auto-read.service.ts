@@ -7,7 +7,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import RE2 from 're2';
 import { Auto, GetriebeType, HerstellerType } from '../entity/auto.entity.js';
-import { Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { Ausstattung } from '../entity/ausstattung.entity.js';
 import { getLogger } from '../../logger/logger.js';
 import { QueryBuilder } from './query-builder.js';
@@ -32,7 +31,7 @@ export interface Suchkriterien {
     readonly grundpreis?: number; 
     readonly istAktuellesModell?: boolean; 
     readonly getriebeArt?: GetriebeType;
-    readonly eigentuemer?: Eigentuemer; 
+    readonly eigentuemer?: string; 
     readonly ausstattung?: Ausstattung; 
 }
 
