@@ -103,7 +103,7 @@ type CreatePayload {
 
 "Daten für ein zu änderndes Autos"
 input AutoUpdateInput {
-  id: Int
+  id: ID
   version: Int
   modellbezeichnung: String
   hersteller: HerstellerType
@@ -112,6 +112,7 @@ input AutoUpdateInput {
   auslieferungstag: String
   grundpreis: Float
   istAktuellesModell: Boolean
+  getriebeArt: GetriebeType
 }
 
 type UpdatePayload {

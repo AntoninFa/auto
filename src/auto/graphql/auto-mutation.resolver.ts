@@ -7,6 +7,7 @@ import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { AutoDTO } from '../rest/autoDTO.entity.js';
 import { AutoWriteService } from '../service/auto-write.service.js';
 import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';
+import { IdInput } from './auto-query.resolver.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGraphQlGuard } from '../../security/auth/roles/roles-graphql.guard.js';
@@ -54,6 +55,34 @@ export class AutoMutationResolver {
         return payload;
     }
 
+    @Mutation()
+    @RolesAllowed('admin', 'verkaeufer')
+    async update(@Args('input') autoDTO: AutoUpdateDTO) {
+        this.#logger.debug('update: auto=%o', autoDTO);
+
+        const auto = this.#updateAutoDtoToAuto(autoDTO);
+        const versionStr = `"${autoDTO.version.toString()}"`;
+
+        const versionResult = await this.#service.update({
+            id: Number.parseInt(autoDTO.id, 10),
+            auto,
+            version: versionStr,
+        });
+        this.#logger.debug('updateAuto: versionResult=%d', versionResult);
+        const payload: UpdatePayload = { version: versionResult };
+        return payload;
+    }
+
+    @Mutation()
+    @RolesAllowed('admin')
+    async delete(@Args() id: IdInput) {
+        const idStr = id.id;
+        this.#logger.debug('delete: id=%s', idStr);
+        const result = await this.#service.delete(idStr);
+        this.#logger.debug('deleteAuto: result=%s', result);
+        return result;
+    }
+
     #autoDtoToAuto(autoDTO: AutoDTO): Auto {
         const eigentuemerDTO = autoDTO.eigentuemer; 
         const eigentuemer: Eigentuemer = {
@@ -92,5 +121,24 @@ export class AutoMutationResolver {
 
         auto.eigentuemer!.auto = auto;
         return auto;
+    }
+
+    #updateAutoDtoToAuto(autoDTO: AutoUpdateDTO): Auto{
+        return {
+            id: undefined,
+            version: undefined,
+            fin: autoDTO.fin,
+            modellbezeichnung: autoDTO.modellbezeichnung,
+            hersteller: autoDTO.hersteller,
+            kilometerstand: autoDTO.kilometerstand,
+            auslieferungstag: autoDTO.auslieferungstag,
+            grundpreis: autoDTO.grundpreis,
+            istAktuellesModell: autoDTO.istAktuellesModell,
+            getriebeArt: autoDTO.getriebeArt,
+            eigentuemer: undefined,
+            ausstattungen: undefined,
+            erzeugt: undefined,
+            aktualisiert: undefined,
+        };
     }
 }
