@@ -15,6 +15,7 @@ export const getLogger: (
     kind = 'class',
 ) => {
     const bindings: Record<string, string> = {};
+    // eslint-disable-next-line security/detect-object-injection
     bindings[kind] = context;
 
     return parentLogger.child(bindings);

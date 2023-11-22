@@ -11,6 +11,7 @@ import {
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { type Ausstattung } from '../entity/ausstattung.entity.js';
 import { QueryBuilder } from './query-builder.js';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import RE2 from 're2';
 import { getLogger } from '../../logger/logger.js';
 

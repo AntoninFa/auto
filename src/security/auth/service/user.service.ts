@@ -36,6 +36,7 @@ export class UserService {
      * @return Ein Objekt vom Typ {@linkcode User}, falls es einen Benutzer
      *  mit dem angegebenen Benutzernamen gibt. Sonst `undefined`.
      */
+    // eslint-disable-next-line @typescript-eslint/require-await
     async findOne(username: string) {
         return this.#users.find((user: User) => user.username === username);
     }
@@ -47,6 +48,7 @@ export class UserService {
      * @return Ein Objekt vom Typ {@linkcode User}, falls es einen Benutzer
      *  mit der angegebenen ID gibt. Sonst `undefined`.
      */
+    // eslint-disable-next-line @typescript-eslint/require-await
     async findById(id: number | undefined) {
         return this.#users.find((user: User) => user.userId === id);
     }

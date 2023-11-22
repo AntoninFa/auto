@@ -72,8 +72,9 @@ const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
           targets: [fileOptions],
       };
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const transports = pino.transport(options);
 
 export const parentLogger: pino.Logger<SonicBoom> = loggerDefaultValue
     ? pino(pino.destination(logFileDefault))
-    : pino({ level: logLevel }, transports); 
+    : pino({ level: logLevel }, transports); // eslint-disable-line @typescript-eslint/no-unsafe-argument

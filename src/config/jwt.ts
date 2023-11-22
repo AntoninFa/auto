@@ -22,9 +22,7 @@ const { jwt } = config;
 const signOptions: SignOptions = {
     algorithm,
     expiresIn: (jwt?.expiresIn as string | undefined) ?? '1h',
-    issuer:
-        (jwt?.issuer as string | undefined) ??
-        'https://gruppe1.de',
+    issuer: (jwt?.issuer as string | undefined) ?? 'https://gruppe1.de',
 };
 
 const verifyOptions: VerifyOptions = {

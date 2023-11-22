@@ -18,7 +18,9 @@ import {
 @ApiTags('Health')
 export class HealthController {
     readonly #health: HealthCheckService;
+
     readonly #typeorm: TypeOrmHealthIndicator;
+
     constructor(health: HealthCheckService, typeorm: TypeOrmHealthIndicator) {
         this.#health = health;
         this.#typeorm = typeorm;

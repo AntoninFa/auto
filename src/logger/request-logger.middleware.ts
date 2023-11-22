@@ -13,7 +13,6 @@ export class RequestLoggerMiddleware implements NestMiddleware {
 
     /**
      * Dient zur Verwendung der Objekte von Express
-     * 
      * @param req Request-Objekt von Express
      * @param _res Nicht-verwendetes Response-Objekt von Express
      * @param next Funktion der als nächstes aufzurufenden Middleware

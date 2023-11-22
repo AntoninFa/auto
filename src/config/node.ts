@@ -11,7 +11,7 @@ import { httpsOptions } from './https.js';
 const { NODE_ENV } = env;
 
 const computername = hostname();
-const port = (config.node?.port as number | undefined) ?? 3000;
+const port = (config.node?.port as number | undefined) ?? 3000; // eslint-disable-line @typescript-eslint/no-magic-numbers
 
 /**
  * Konfigurationen für den auf Node basierenden Server.

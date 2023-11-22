@@ -1,4 +1,3 @@
-
 /**
  * Das Modul enthält die Controller-Klasse für die Authentifizierung an der
  * REST-Schnittstelle.
@@ -37,12 +36,13 @@ import { UserService } from './service/user.service.js';
 import { getLogger } from '../../logger/logger.js';
 import { paths } from '../../config/paths.js';
 
-/** 
- * Entity-Klasse für Login-Daten. 
-*/
+/**
+ * Entity-Klasse für Login-Daten.
+ */
 export class Login {
     @ApiProperty({ example: 'admin', type: String })
     username: string | undefined;
+
     @ApiProperty({ example: 'p', type: String })
     password: string | undefined;
 }
@@ -55,7 +55,9 @@ export class Login {
 @ApiTags('Authentifizierung und Autorisierung')
 export class AuthController {
     readonly #authService: AuthService;
+
     readonly #userService: UserService;
+
     readonly #logger = getLogger(AuthController.name);
 
     constructor(authService: AuthService, userService: UserService) {
@@ -98,7 +100,9 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Rollen des Users anhand des Tokens ermitteln' })
     @ApiOkResponse({ description: 'Die Rollen zum User.' })
-    @ApiNotFoundResponse({ description: 'Keine Rolle zum angegebenen User gefunden.' })
+    @ApiNotFoundResponse({
+        description: 'Keine Rolle zum angegebenen User gefunden.',
+    })
     @ApiBearerAuth()
     async getRoles(@Req() req: Request, @Res() res: Response) {
         const reqUser = (req as RequestWithUser).user;

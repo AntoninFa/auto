@@ -26,7 +26,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
     /**
      * `User`-Objekt ermitteln, falls das mitgelieferte Passwort korrekt ist.
-     * 
+     *
      * @param username Benutzername
      * @param password Passwort
      * @return Das User-Objekt bei erfolgreicher Validierung. Passwort verwendet
@@ -34,7 +34,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
      * @throws UnauthorizedException
      */
     async validate(username: string, password: string): Promise<any> {
-        this.#logger.debug('validate: username=%s, password=*****', username); //NOSONAR
+        this.#logger.debug('validate: username=%s, password=*****', username); // NOSONAR
         const user = await this.#authService.validate({
             username,
             pass: password,

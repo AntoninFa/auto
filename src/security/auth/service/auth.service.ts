@@ -1,4 +1,3 @@
-
 /**
  * Dieses Modul enthält die Klasse {@linkcode AuthService} für die
  * Authentifizierung.
@@ -13,16 +12,16 @@ import { jwtConfig } from '../../../config/jwt.js';
 import { v4 as uuidv4 } from 'uuid';
 import { verify } from 'argon2';
 
-/** 
- * Typdefinition für die Validierung der Authentifizierungsdaten. 
+/**
+ * Typdefinition für die Validierung der Authentifizierungsdaten.
  */
 export interface ValidateParams {
-    /** 
-     * Benutzername. 
+    /**
+     * Benutzername.
      */
     readonly username: string | undefined;
-    /** 
-     * Eingegebenes Passwort. 
+    /**
+     * Eingegebenes Passwort.
      */
     readonly pass: string | undefined;
 }
@@ -40,8 +39,11 @@ export interface LoginResult {
 @Injectable()
 export class AuthService {
     readonly #userService: UserService;
+
     readonly #jwtService: JwtService;
+
     readonly #logger = getLogger(AuthService.name);
+
     constructor(userService: UserService, jwtService: JwtService) {
         this.#userService = userService;
         this.#jwtService = jwtService;
@@ -67,7 +69,7 @@ export class AuthService {
             return;
         }
         const userPassword = user.password;
-        this.#logger.debug('validate: userPassword=*****, password=*****'); //NOSONAR
+        this.#logger.debug('validate: userPassword=*****, password=*****'); // NOSONAR
         const isPasswordOK = await this.#checkPassword(userPassword, pass);
         if (!isPasswordOK) {
             this.#logger.debug('validate: Falsches password.');

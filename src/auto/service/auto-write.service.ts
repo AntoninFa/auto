@@ -15,6 +15,7 @@ import { AutoReadService } from './auto-read.service.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MailService } from '../../mail/mail.service.js';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import RE2 from 're2';
 import { getLogger } from '../../logger/logger.js';
 

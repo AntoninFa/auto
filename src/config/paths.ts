@@ -1,5 +1,5 @@
 /**
- * Klasse für die Paths. 
+ * Klasse für die Paths.
  */
 export const paths = {
     rest: 'rest',

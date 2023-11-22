@@ -12,7 +12,7 @@ export interface LoginInput {
      */
     readonly username: string;
     /**
-     *  Passwort 
+     *  Passwort
      */
     readonly password: string;
 }
@@ -21,7 +21,9 @@ export interface LoginInput {
 @UseInterceptors(ResponseTimeInterceptor)
 export class LoginResolver {
     readonly #service: AuthService;
+
     readonly #logger = getLogger(LoginResolver.name);
+
     constructor(service: AuthService) {
         this.#service = service;
     }

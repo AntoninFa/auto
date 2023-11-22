@@ -1,4 +1,3 @@
-
 /**
  * Dieses Modul enthält Security-Funktionen für z.B. CSP, XSS, Click-Jacking,
  * HSTS und MIME-Sniffing, implementiert von helmet.

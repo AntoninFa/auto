@@ -1,4 +1,3 @@
-
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './service/auth.service.js';
 import { JwtModule } from '@nestjs/jwt';

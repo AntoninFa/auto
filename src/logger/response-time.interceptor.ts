@@ -29,6 +29,7 @@ export class ResponseTimeInterceptor implements NestInterceptor {
                 const { statusCode, statusMessage } = response;
                 const responseTime =
                     Temporal.Now.instant().epochMilliseconds - start;
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
                 if (statusMessage === undefined) {
                     this.#logger.debug('Response time: %d ms', responseTime);
                     return;
@@ -48,5 +49,6 @@ export class ResponseTimeInterceptor implements NestInterceptor {
     }
 
     readonly #empty = () => {
+        /* do nothing */
     };
 }

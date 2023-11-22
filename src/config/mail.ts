@@ -10,7 +10,7 @@ import { loggerDefaultValue } from './logger.js';
 const { mail } = config;
 const activated = mail?.activated === undefined || mail?.activated === true;
 const host = (mail?.host as string | undefined) ?? 'smtp';
-const port = (mail?.port as number | undefined) ?? 25;
+const port = (mail?.port as number | undefined) ?? 25; // eslint-disable-line @typescript-eslint/no-magic-numbers
 const logger = mail?.log === true;
 
 /**

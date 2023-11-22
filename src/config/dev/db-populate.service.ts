@@ -22,8 +22,11 @@ import { resolve } from 'node:path';
 @Injectable()
 export class DbPopulateService implements OnApplicationBootstrap {
     readonly #tabellen = ['auto', 'eigentuemer', 'ausstattung'];
+
     readonly #datasource: DataSource;
+
     readonly #resourcesDir = dbResourcesDir;
+
     readonly #logger = getLogger(DbPopulateService.name);
 
     /**
@@ -45,7 +48,7 @@ export class DbPopulateService implements OnApplicationBootstrap {
             return;
         }
         this.#logger.warn(`${typeOrmModuleOptions.type}: DB wird neu geladen`);
-                await this.#populatePostgres();
+        await this.#populatePostgres();
         this.#logger.warn('DB wurde neu geladen');
     }
 
@@ -53,12 +56,13 @@ export class DbPopulateService implements OnApplicationBootstrap {
         const dropScript = resolve(this.#resourcesDir, 'drop.sql');
         const dropStatements = readFileSync(dropScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
         await this.#datasource.query(dropStatements);
-        const createScript = resolve(this.#resourcesDir, 'create.sql'); // eslint-disable-line sonarjs/no-duplicate-string
+        const createScript = resolve(this.#resourcesDir, 'create.sql');
         const createStatements = readFileSync(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
         await this.#datasource.query(createStatements);
         const dataSource = new DataSource(adminDataSourceOptions);
         await dataSource.initialize();
         await dataSource.query(
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             `SET search_path TO ${adminDataSourceOptions.database};`,
         );
         const copyStmt =
