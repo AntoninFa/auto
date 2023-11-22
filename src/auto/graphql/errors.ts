@@ -1,5 +1,5 @@
 /**
- * Dieses Modul enthält die {@linkcode BadUserInputError} Klasse zur 
+ * Dieses Modul enthält die {@linkcode BadUserInputError} Klasse zur
  * Behandlung von User Input Fehlern.
  * @packageDocumentation
  */
@@ -10,6 +10,7 @@ import { GraphQLError } from 'graphql';
  * Klasse die einen Error-Response mit Fehlercode: "BAD_USER_INPUT" produziert.
  */
 export class BadUserInputError extends GraphQLError {
+    // eslint-disable-next-line unicorn/custom-error-definition
     constructor(message: string, exception?: Error) {
         super(message, {
             originalError: exception,
