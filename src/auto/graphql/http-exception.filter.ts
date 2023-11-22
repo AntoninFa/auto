@@ -1,5 +1,5 @@
 /**
- * Dieses Modul enthält die Klasse {@linkcode HttpExceptionFilter} welche HttpExceptions 
+ * Dieses Modul enthält die Klasse {@linkcode HttpExceptionFilter} welche HttpExceptions
  * filtert um bessere Fehlermeldungen bereitzustellen.
  * @packageDocumentation
  */
@@ -18,6 +18,7 @@ import { BadUserInputError } from './errors.js';
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
     catch(exception: HttpException, _host: ArgumentsHost) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { message }: { message: string } = exception.getResponse() as any;
         throw new BadUserInputError(message, exception);
     }

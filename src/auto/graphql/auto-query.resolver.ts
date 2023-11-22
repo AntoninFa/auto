@@ -42,8 +42,12 @@ export class AutoQueryResolver {
     @Query('autos')
     async find(@Args() eigentuemer: { eigentuemer: string } | undefined) {
         const eigentuemerStr = eigentuemer?.eigentuemer;
-        this.#logger.debug('find: Suchkriterium eigentuemer=%s', eigentuemerStr);
-        const suchkriterium = eigentuemerStr === undefined ? {} : { eigentuemer: eigentuemerStr };
+        this.#logger.debug(
+            'find: Suchkriterium eigentuemer=%s',
+            eigentuemerStr,
+        );
+        const suchkriterium =
+            eigentuemerStr === undefined ? {} : { eigentuemer: eigentuemerStr };
 
         const autos = await this.#service.find(suchkriterium);
 

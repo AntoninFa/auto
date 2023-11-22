@@ -1,18 +1,19 @@
+// eslint-disable-next-line max-classes-per-file
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { IsInt, IsNumberString, Min } from 'class-validator';
 import { UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { type Ausstattung } from '../entity/ausstattung.entity.js';
 import { type Auto } from '../entity/auto.entity.js';
-import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { AutoDTO } from '../rest/autoDTO.entity.js';
 import { AutoWriteService } from '../service/auto-write.service.js';
-import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';
+import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
+import { getLogger } from '../../logger/logger.js';
+import { HttpExceptionFilter } from './http-exception.filter.js';
 import { IdInput } from './auto-query.resolver.js';
+import { JwtAuthGraphQlGuard } from '../../security/auth/jwt/jwt-auth-graphql.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGraphQlGuard } from '../../security/auth/roles/roles-graphql.guard.js';
-import { getLogger } from '../../logger/logger.js';
-import { HttpExceptionFilter } from './http-exception.filter.js';
 
 export interface CreatePayload {
     readonly id: number;
@@ -84,7 +85,7 @@ export class AutoMutationResolver {
     }
 
     #autoDtoToAuto(autoDTO: AutoDTO): Auto {
-        const eigentuemerDTO = autoDTO.eigentuemer; 
+        const eigentuemerDTO = autoDTO.eigentuemer;
         const eigentuemer: Eigentuemer = {
             id: undefined,
             eigentuemer: eigentuemerDTO.eigentuemer,
@@ -123,7 +124,7 @@ export class AutoMutationResolver {
         return auto;
     }
 
-    #updateAutoDtoToAuto(autoDTO: AutoUpdateDTO): Auto{
+    #updateAutoDtoToAuto(autoDTO: AutoUpdateDTO): Auto {
         return {
             id: undefined,
             version: undefined,

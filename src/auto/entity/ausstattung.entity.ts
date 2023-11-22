@@ -1,5 +1,5 @@
 /**
- * Das Modul besteht aus der Entity-Klasse Ausstattung. 
+ * Das Modul besteht aus der Entity-Klasse Ausstattung
  * @packageDocumentation
  */
 
@@ -10,8 +10,8 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Auto } from './auto.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
+import { Auto } from './auto.entity.js';
 import { DecimalTransformer } from './decimal-transformer.js';
 
 @Entity()
@@ -26,11 +26,11 @@ export class Ausstattung {
     /**
      * Bezeichnung der Ausstattungsauswahl.
      */
-    @Column('varchar', {unique: true , length: 32})
-    readonly bezeichnung!: string; 
+    @Column('varchar', { unique: true, length: 32 })
+    readonly bezeichnung!: string;
 
     /**
-     * Preis des Ausstattungsstücks. 
+     * Preis des Ausstattungsstücks
      */
     @Column('decimal', {
         precision: 8,
@@ -38,7 +38,7 @@ export class Ausstattung {
         transformer: new DecimalTransformer(),
     })
     @ApiProperty({ example: 1, type: Number })
-    readonly preis!: number; 
+    readonly preis!: number;
 
     /**
      * Boolean Abfrage, ob ein Ausstattungsstück verfuegbar ist.
@@ -48,17 +48,17 @@ export class Ausstattung {
     readonly verfuegbar: boolean | undefined;
 
     /**
-     * 1:n Beziehung zu Ausstattung. 
+     * 1:n Beziehung zu Ausstattung
      */
     @ManyToOne(() => Auto, (auto) => auto.ausstattungen)
     @JoinColumn({ name: 'auto_id' })
     auto: Auto | undefined;
-    
+
     public toString = (): string =>
-    JSON.stringify({
-        id: this.id,
-        bezeichnung: this.bezeichnung,
-        preis: this.preis,
-        verfuegbar: this.verfuegbar
-    });
+        JSON.stringify({
+            id: this.id,
+            bezeichnung: this.bezeichnung,
+            preis: this.preis,
+            verfuegbar: this.verfuegbar,
+        });
 }

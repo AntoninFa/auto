@@ -5,13 +5,13 @@
 
 import {
     Column,
-    PrimaryGeneratedColumn,
-    Entity,
-    OneToOne,
-    OneToMany,
-    VersionColumn,
     CreateDateColumn,
+    Entity,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
     UpdateDateColumn,
+    VersionColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Ausstattung } from './ausstattung.entity.js';
@@ -35,7 +35,6 @@ export type HerstellerType = 'VOLKSWAGEN' | 'AUDI' | 'DAIMLER' | 'RENAULT';
  */
 @Entity()
 export class Auto {
-
     @Column('int')
     @PrimaryGeneratedColumn()
     id: number | undefined;
@@ -47,9 +46,9 @@ export class Auto {
     @ApiProperty({ example: 'Golf' })
     readonly modellbezeichnung!: string;
 
-    @Column('varchar', {length: 10})
-    @ApiProperty({ example: 'Audi'})
-    readonly hersteller! : HerstellerType | undefined; 
+    @Column('varchar', { length: 10 })
+    @ApiProperty({ example: 'Audi' })
+    readonly hersteller!: HerstellerType | undefined;
 
     @Column('varchar', { unique: true, length: 17 })
     @ApiProperty({ example: '1HGCM82633A123456' })
