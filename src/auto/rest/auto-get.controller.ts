@@ -2,7 +2,7 @@
  * Das Modul besteht aus der Controller-Klasse für Lesen an der REST-Schnittstelle.
  * @packageDocumentation
  */
-
+// eslint-disable-next-line max-classes-per-file
 import {
     ApiHeader,
     ApiNotFoundResponse,
@@ -13,7 +13,11 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import {HerstellerType, Auto, type GetriebeType} from '../../auto/entity/auto.entity.js';
+import {
+    type Auto,
+    type GetriebeType,
+    HerstellerType,
+} from '../../auto/entity/auto.entity.js';
 import {
     AutoReadService,
     type Suchkriterien,
@@ -30,15 +34,15 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { paths } from '../../config/paths.js';
+import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
-import { Eigentuemer } from '../entity/eigentuemer.entity.js';
-import { getLogger } from '../../logger/logger.js';
 import { getBaseUri } from './getBaseUri.js';
+import { getLogger } from '../../logger/logger.js';
+import { paths } from '../../config/paths.js';
 
-/**href-Link für HATEOS */
+/** href-Link für HATEOS */
 export interface Link {
-    readonly href: string; 
+    readonly href: string;
 }
 
 /** Links für HATEOAS */
@@ -58,28 +62,35 @@ export interface Links {
 /**
  * Typdefinition eines Eigentuemer- & Ausstattungs-Objekts ohne Rückwärtsverweis zum Auto
  */
-export type EigentuemerModel = Omit<Eigentuemer, 'auto' | 'id'>
+export type EigentuemerModel = Omit<Eigentuemer, 'auto' | 'id'>;
 
-export type AutoModel = Omit <
-    Auto, 
-    'eigentuemer' | 'ausstattungen'| 'aktualisiert' | 'erzeugt' | 'id' | 'version'
+export type AutoModel = Omit<
+    Auto,
+    | 'eigentuemer'
+    | 'ausstattungen'
+    | 'aktualisiert'
+    | 'erzeugt'
+    | 'id'
+    | 'version'
 > & {
-    eigentuemer: EigentuemerModel; 
-    _links: Links; 
-}
+    eigentuemer: EigentuemerModel;
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    _links: Links;
+};
 
 /**
  * Auto-Objekte mit HATEOAS-Links in einem JSON-Array
  */
 export interface AutosModel {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     _embedded: {
         autos: AutoModel[];
-    }
+    };
 }
 
 /**
- * Klasse für `AutoGetController`, um die Queries in _OpenAPI_ zu formulieren. 
- * Damit dürfen die Properties auch undefined deklariert werden. 
+ * Klasse für `AutoGetController`, um die Queries in _OpenAPI_ zu formulieren.
+ * Damit dürfen die Properties auch undefined deklariert werden.
  */
 export class AutoQuery implements Suchkriterien {
     @ApiProperty({ required: false })
@@ -124,29 +135,30 @@ export class AutoGetController {
     readonly #logger = getLogger(AutoGetController.name);
 
     constructor(service: AutoReadService) {
-        this.#service = service; 
+        this.#service = service;
     }
 
-/**
- * 
- * Ein Auto wird asynchron anhand seiner ID gesucht.
- * 
- * Falls ein Auto gefunden wird und `If-None-Match` auf die aktuelle Version gesetzt war, 
- * wird der Statuscode `304` - Not Modified ausgegeben. Falls `If-None-Match` nicht gesetzt war 
- * oder die Version veraltet ist wird das Objekt als JSON-Datensatz zurückgeliefert, 
- * mit Statuscode `200` (`OK`).
- * 
- * Falls es kein Auto zur ID gab, wir der Statuscode `404` (`Not Found`) ausgegeben. 
- * 
- * @param id Pfad-Parameter `id` 
- * @param req Request Objekt
- * @param version Versionsnummer im Request Header
- * @param accept Mime-Type
- * @param res Leeres Response Objekt von Express
- * @returns Leeres Promise Objekt
- */
+    /**
+     *
+     * Ein Auto wird asynchron anhand seiner ID gesucht.
+     *
+     * Falls ein Auto gefunden wird und `If-None-Match` auf die aktuelle Version gesetzt war,
+     * wird der Statuscode `304` - Not Modified ausgegeben. Falls `If-None-Match` nicht gesetzt war
+     * oder die Version veraltet ist wird das Objekt als JSON-Datensatz zurückgeliefert,
+     * mit Statuscode `200` (`OK`).
+     *
+     * Falls es kein Auto zur ID gab, wir der Statuscode `404` (`Not Found`) ausgegeben.
+     *
+     * @param id Pfad-Parameter `id`
+     * @param req Request Objekt
+     * @param version Versionsnummer im Request Header
+     * @param accept Mime-Type
+     * @param res Leeres Response Objekt von Express
+     * @returns Leeres Promise Objekt
+     */
+    // eslint-disable-next-line max-params
     @Get(':id')
-    @ApiOperation({summary: 'Suche mit der Auto-ID'})
+    @ApiOperation({ summary: 'Suche mit der Auto-ID' })
     @ApiParam({
         name: 'id',
         description: 'z.B. 1',
@@ -187,7 +199,7 @@ export class AutoGetController {
         }
 
         // ETags
-        const versionDb =  auto.version;
+        const versionDb = auto.version;
         if (version === `"${versionDb}"`) {
             this.#logger.debug('getById: NOT_MODIFIED');
             return res.sendStatus(HttpStatus.NOT_MODIFIED);
@@ -203,13 +215,13 @@ export class AutoGetController {
 
     /**
      * Autos werden mit Query-Parameter asynchron gesucht. Gibt es mindestens
-     * ein Auto, dann wird der Statuscode `200` (`OK`) zurückgegeben. 
-     * 
+     * ein Auto, dann wird der Statuscode `200` (`OK`) zurückgegeben.
+     *
      * Gibt es kein Auto zur gesuchten ID, dann werden alle Autos ausgegeben.
-     * 
+     *
      * @param query Query-Parameter
-     * @param req Request-Objekt 
-     * @param res Leeres Response-Objekt 
+     * @param req Request-Objekt
+     * @param res Leeres Response-Objekt
      * @returns Leeres Promise-Obkjet
      */
     @Get()
@@ -231,8 +243,8 @@ export class AutoGetController {
         this.#logger.debug('get: %o', autos);
 
         // HATEOAS: Atom Links je Auto
-        const autosModel = autos.map((auto:Auto): AutoModel =>
-            this.#toModel(auto, req, false),
+        const autosModel = autos.map(
+            (auto: Auto): AutoModel => this.#toModel(auto, req, false),
         );
         this.#logger.debug('get: autoModel=%o', autosModel);
 
@@ -240,7 +252,7 @@ export class AutoGetController {
         return res.contentType(APPLICATION_HAL_JSON).json(result).send();
     }
 
-    #toModel(auto: Auto, req: Request, all=true): AutoModel {
+    #toModel(auto: Auto, req: Request, all = true): AutoModel {
         const baseUri: string = getBaseUri(req);
         this.#logger.debug('#toModel: baseUri=%s', baseUri);
         const { id } = auto;
@@ -256,6 +268,7 @@ export class AutoGetController {
 
         this.#logger.debug('#toModel: auto=%o, links=%o', auto, links);
         const eigentuemerModel: EigentuemerModel = {
+            /* eslint-disable unicorn/consistent-destructuring */
             eigentuemer: auto.eigentuemer?.eigentuemer ?? 'N/A',
             fuehrerscheinnummer: auto.eigentuemer?.fuehrerscheinnummer ?? 'N/A',
             geburtsdatum: auto.eigentuemer?.geburtsdatum ?? 'N/A',
@@ -273,11 +286,7 @@ export class AutoGetController {
             eigentuemer: eigentuemerModel,
             _links: links,
         };
-
+        /* eslint-enable unicorn/consistent-destructuring */
         return autoModel;
     }
 }
-
-
-
-

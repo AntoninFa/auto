@@ -3,6 +3,7 @@
  * @packageDocumentation
  */
 
+// eslint-disable-next-line max-classes-per-file
 import { HttpException, HttpStatus } from '@nestjs/common';
 /**
  * Ausnahme, falls die fin eines anzulegenden Autos bereits verwendet wird.

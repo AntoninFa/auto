@@ -2,10 +2,9 @@
  * Dieses Modul enthält eine Hilfsklasse um URIs zu ermitteln
  * @packageDocumentation
  */
-
-import { nodeConfig } from '../../config/node.js';
-import { type Request } from 'express';
 import { AutoReadService } from '../service/auto-read.service.js';
+import { type Request } from 'express';
+import { nodeConfig } from '../../config/node.js';
 
 const port = `:${nodeConfig.port}`;
 

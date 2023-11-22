@@ -15,6 +15,7 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
+import { AutoDTO, AutoDtoOhneRef } from './autoDTO.entity.js';
 import {
     Body,
     Controller,
@@ -30,19 +31,18 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { AutoDTO, AutoDtoOhneRef } from './autoDTO.entity.js';
 import { Request, Response } from 'express';
 import { type Ausstattung } from '../entity/ausstattung.entity.js';
 import { type Auto } from '../entity/auto.entity.js';
 import { AutoWriteService } from '../service/auto-write.service.js';
 import { type Eigentuemer } from '../entity/eigentuemer.entity.js';
-import { getBaseUri } from './getBaseUri.js';
-import { getLogger } from '../../logger/logger.js';
-import { paths } from '../../config/paths.js';
 import { JwtAuthGuard } from '../../security/auth/jwt/jwt-auth.guard.js';
 import { ResponseTimeInterceptor } from '../../logger/response-time.interceptor.js';
 import { RolesAllowed } from '../../security/auth/roles/roles-allowed.decorator.js';
 import { RolesGuard } from '../../security/auth/roles/roles.guard.js';
+import { getBaseUri } from './getBaseUri.js';
+import { getLogger } from '../../logger/logger.js';
+import { paths } from '../../config/paths.js';
 
 const MSG_FORBIDDEN = 'Kein Token mit ausreichender Berechtigung vorhanden';
 /**
@@ -64,8 +64,8 @@ export class AutoWriteController {
 
     /**
      * Asynchronse Anlegen eines neuen Autos. Das neu anzulegende Auto ist als
-     * JSON-Datensatz im Request-Objekt enthalten. Bei erfolgreichen Anlegen 
-     * wird der Statuscode `201` (`Created`) gesetzt und der `Location`-Header 
+     * JSON-Datensatz im Request-Objekt enthalten. Bei erfolgreichen Anlegen
+     * wird der Statuscode `201` (`Created`) gesetzt und der `Location`-Header
      * ermöglicht das Abrufen des neuen Autos.
      *
      * Bei Verletzungen von Constraints oder wenn die Fin bereits existiert
@@ -98,15 +98,15 @@ export class AutoWriteController {
 
     /**
      * Asynchrone Aktualisierung eines vorhandenen Autos. Die ID des zu
-     * aktualisierenden Autos muss als Pfad-Parameter im Express Request-Objekt 
+     * aktualisierenden Autos muss als Pfad-Parameter im Express Request-Objekt
      * enthalten sein. Der JSON-Datensatz des zu aktualisierenden Autos muss
      * im Request-Body vorhanden sein. Zur Durchführung der Aktualisierung
-     * muss der Header das If-Match-Feld mit der korrekten Versionsnummer für 
+     * muss der Header das If-Match-Feld mit der korrekten Versionsnummer für
      * die optimistische Synchronisation enthalten.
-     * 
-     * Bei erfolgreicher Aktualisierung wird der Statuscode `204` (`No Content`) 
+     *
+     * Bei erfolgreicher Aktualisierung wird der Statuscode `204` (`No Content`)
      * gesetzt, und der Header enthält auch die neue Versionsnummer als ETag.
-     * 
+     *
      * Falls die Versionsnummer fehlt, wird der Statuscode `428` (`Precondition
      * required`) gesetzt, bei inkorrekter Versionsnummer wird der Statuscode `412`
      * (`Precondition failed`) gesetzt. Bei Verletzungen von Constraints oder wenn
@@ -118,6 +118,7 @@ export class AutoWriteController {
      * @param res Leeres Express Response-Objekt .
      * @returns Leeres Promise-Objekt.
      */
+    // eslint-disable-next-line max-params
     @Put(':id')
     @RolesAllowed('admin', 'verkaeufer')
     @HttpCode(HttpStatus.NO_CONTENT)
@@ -236,7 +237,7 @@ export class AutoWriteController {
     #autoDtoOhneRefToAuto(autoDTO: AutoDtoOhneRef): Auto {
         return {
             id: undefined,
-            version: undefined,   
+            version: undefined,
             modellbezeichnung: autoDTO.modellbezeichnung,
             hersteller: autoDTO.hersteller,
             fin: autoDTO.fin,

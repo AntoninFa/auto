@@ -3,21 +3,20 @@
  * als Abstraktion von Schreiboperationen im Anwendungskern und DB-Zugriffen.
  * @packageDocumentation
  */
-
-import RE2 from 're2';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { type DeleteResult, Repository } from 'typeorm';
 import {
     FinAlreadyExistsException,
     VersionInvalidException,
     VersionOutdatedException,
 } from './exceptions.js';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Auto } from '../entity/auto.entity.js';
-import { getLogger } from '../../logger/logger.js';
-import { type DeleteResult, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AutoReadService } from './auto-read.service.js';
 import { Eigentuemer } from '../entity/eigentuemer.entity.js';
+import { InjectRepository } from '@nestjs/typeorm';
 import { MailService } from '../../mail/mail.service.js';
+import RE2 from 're2';
+import { getLogger } from '../../logger/logger.js';
 
 /**
  * Typdefinitionen, die die Struktur eines Objekt vorgeben, das zum Updaten
@@ -43,10 +42,14 @@ export interface UpdateParams {
  */
 @Injectable()
 export class AutoWriteService {
-    private static readonly VERSION_PATTERN: RE2 =new RE2('^"\\d*"');
+    private static readonly VERSION_PATTERN: RE2 = new RE2('^"\\d*"');
+
     readonly #repo: Repository<Auto>;
+
     readonly #readService: AutoReadService;
+
     readonly #logger = getLogger(AutoWriteService.name);
+
     readonly #mailService: MailService;
 
     constructor(
@@ -73,19 +76,6 @@ export class AutoWriteService {
         return autoDb.id!;
     }
 
-    async #validateCreate(auto: Auto): Promise<undefined> {
-        this.#logger.debug('#validateCreate: auto=%o', auto);
-        const { fin } = auto;
-        try {
-            await this.#readService.find({ fin: fin});
-        } catch (err) {
-            if (err instanceof NotFoundException) {
-                return;
-            }
-        }
-        throw new FinAlreadyExistsException(fin);
-    }
-
     /**
      * Aktualisierung eines bereits existierenden Autos.
      * @param auto Auto welches aktualisiert werden soll.
@@ -95,7 +85,7 @@ export class AutoWriteService {
      * @throws VersionInvalidException bei ungültiger Versionsnummer.
      * @throws VersionOutdatedException bei veralteter Versionsnummer.
      */
-    async update({id, auto, version}: UpdateParams): Promise<number> {
+    async update({ id, auto, version }: UpdateParams): Promise<number> {
         this.#logger.debug(
             'update: id=%d, auto=%o, version=%s',
             id,
@@ -104,7 +94,9 @@ export class AutoWriteService {
         );
         if (id === undefined) {
             this.#logger.debug('update: ID ist ungueltig');
-            throw new NotFoundException(`Es existiert kein Auto mit ID: ${id}.`);
+            throw new NotFoundException(
+                `Es existiert kein Auto mit ID: ${id}.`,
+            );
         }
         const validateResult = await this.#validateUpdate(auto, id, version);
         this.#logger.debug('update: validateResult=%o', validateResult);
@@ -119,6 +111,47 @@ export class AutoWriteService {
         return updated.version!;
     }
 
+    /**
+     * Löschen eines Autos durch seine ID.
+     *
+     * @param id ID des zu löschenden Autos.
+     * @returns true, bei erfolgreichem löschen. Sonst false.
+     */
+    async delete(id: number) {
+        this.#logger.debug('delete: id: %d', id);
+        const auto = await this.#readService.findById({
+            id,
+            mitAusstattung: false,
+        });
+        let deleteResult: DeleteResult | undefined;
+        await this.#repo.manager.transaction(async (transactionalMgr) => {
+            const eigentuemerID = auto.eigentuemer?.id;
+            if (eigentuemerID !== undefined) {
+                await transactionalMgr.delete(Eigentuemer, eigentuemerID);
+            }
+            deleteResult = await transactionalMgr.delete(Auto, id);
+            this.#logger.debug('delete: deleteResult=%o', deleteResult);
+        });
+        return (
+            deleteResult?.affected !== undefined &&
+            deleteResult.affected !== null &&
+            deleteResult.affected > 0
+        );
+    }
+
+    async #validateCreate(auto: Auto): Promise<undefined> {
+        this.#logger.debug('#validateCreate: auto=%o', auto);
+        const { fin } = auto;
+        try {
+            await this.#readService.find({ fin });
+        } catch (err) {
+            if (err instanceof NotFoundException) {
+                return;
+            }
+        }
+        throw new FinAlreadyExistsException(fin);
+    }
+
     async #validateUpdate(
         auto: Auto,
         id: number,
@@ -129,7 +162,10 @@ export class AutoWriteService {
             `#validateUpdate: Version: ${versionNum}, auto: auto=%o `,
             auto,
         );
-        const resultFindById = await this.#findByIdAndCheckVersion(id, versionNum);
+        const resultFindById = await this.#findByIdAndCheckVersion(
+            id,
+            versionNum,
+        );
         this.#logger.debug('#validateUpdate: %o', resultFindById);
         return resultFindById;
     }
@@ -158,40 +194,12 @@ export class AutoWriteService {
         return autoDB;
     }
 
-    /**
-     * Löschen eines Autos durch seine ID.
-     * 
-     * @param id ID des zu löschenden Autos.
-     * @returns true, bei erfolgreichem löschen. Sonst false.
-     */
-    async delete(id: number) {
-        this.#logger.debug('delete: id: %d', id);
-        const auto = await this.#readService.findById({
-            id,
-            mitAusstattung: false,
-        });
-        let deleteResult: DeleteResult | undefined;
-        await this.#repo.manager.transaction(async (transactionalMgr) => {
-            const eigentuemerID = auto.eigentuemer?.id;
-            if (eigentuemerID !== undefined) {
-                await transactionalMgr.delete(Eigentuemer, eigentuemerID);
-            }
-            deleteResult = await transactionalMgr.delete(Auto, id);
-            this.#logger.debug('delete: deleteResult=%o', deleteResult);
-        });
-        return (
-            deleteResult?.affected !== undefined &&
-            deleteResult.affected !== null &&
-            deleteResult.affected > 0
-        );
-    }
-
     async #writeMail(auto: Auto, s1: string, s2: string) {
         const subject = `Auto ${s1} (ID: ${auto.id})`;
-        const fin = auto.fin;
+        const { fin } = auto;
         const eigentuemer = auto.eigentuemer?.eigentuemer ?? 'Unbekannt';
         const body = `Ein Auto mit der fin: ${fin} 
         und dem Eigentümer ${eigentuemer} wurde ${s2}`;
-        await this.#mailService.writeMail({subject, body})
+        await this.#mailService.writeMail({ subject, body });
     }
 }

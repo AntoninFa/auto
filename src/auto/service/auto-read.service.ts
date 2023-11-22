@@ -3,36 +3,39 @@
  * als Abstraktion von Leseoperationen im Anwendungskern und DB-Zugriffen.
  * @packageDocumentation
  */
-
+import {
+    Auto,
+    type GetriebeType,
+    type HerstellerType,
+} from '../entity/auto.entity.js';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import RE2 from 're2';
-import { Auto, GetriebeType, HerstellerType } from '../entity/auto.entity.js';
-import { Ausstattung } from '../entity/ausstattung.entity.js';
-import { getLogger } from '../../logger/logger.js';
+import { type Ausstattung } from '../entity/ausstattung.entity.js';
 import { QueryBuilder } from './query-builder.js';
+import RE2 from 're2';
+import { getLogger } from '../../logger/logger.js';
 
 /**
- * Funktion, um über Parameter ein Auto zu finden. 
+ * Funktion, um über Parameter ein Auto zu finden.
  */
 export interface FindByIdParams {
-    readonly id: number; 
-    readonly mitAusstattung?: boolean; 
+    readonly id: number;
+    readonly mitAusstattung?: boolean;
 }
 
 /**
- * Suchkriterien, zur Suche über Parameter. 
+ * Suchkriterien, zur Suche über Parameter.
  */
 export interface Suchkriterien {
-    readonly modellbezeichnung?: string; 
+    readonly modellbezeichnung?: string;
     readonly hersteller?: HerstellerType;
-    readonly fin?: string; 
-    readonly kilometerstand?: number; 
-    readonly auslieferungstag?: Date; 
-    readonly grundpreis?: number; 
-    readonly istAktuellesModell?: boolean; 
+    readonly fin?: string;
+    readonly kilometerstand?: number;
+    readonly auslieferungstag?: Date;
+    readonly grundpreis?: number;
+    readonly istAktuellesModell?: boolean;
     readonly getriebeArt?: GetriebeType;
-    readonly eigentuemer?: string; 
-    readonly ausstattung?: Ausstattung; 
+    readonly eigentuemer?: string;
+    readonly ausstattung?: Ausstattung;
 }
 
 /**
@@ -44,8 +47,8 @@ export interface Suchkriterien {
 @Injectable()
 export class AutoReadService {
     static readonly ID_PATTERN = new RE2('^[1-9][\\d]*$');
-    
-    readonly #autoProps: string[]; 
+
+    readonly #autoProps: string[];
 
     readonly #queryBuilder: QueryBuilder;
 
@@ -57,11 +60,14 @@ export class AutoReadService {
         this.#queryBuilder = queryBuilder;
     }
 
-    async findById({id, mitAusstattung=false}: FindByIdParams): Promise<Auto> {
+    async findById({
+        id,
+        mitAusstattung = false,
+    }: FindByIdParams): Promise<Auto> {
         this.#logger.debug('findById: id=%d', id);
-        
+
         const auto: Auto | null = await this.#queryBuilder
-            .buildId({id, mitAusstattung})
+            .buildId({ id, mitAusstattung })
             .getOne();
         if (auto === null) {
             throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}.`);
@@ -84,7 +90,7 @@ export class AutoReadService {
     }
 
     /**
-     * Autos werden asynchron gesucht 
+     * Autos werden asynchron gesucht
      * @param suchkriterien JSON-Objekt mit den gegebenen Suchrkriterien
      * @returns Ein JSON-Array mit den gefundenen Autos
      * @returns NotFoundException falls keine Autos gefunden werden
@@ -104,9 +110,11 @@ export class AutoReadService {
             throw new NotFoundException('Ungueltige Suchkriterien');
         }
 
-        const autos: Auto[] = await this.#queryBuilder.build(suchkriterien).getMany();
+        const autos: Auto[] = await this.#queryBuilder
+            .build(suchkriterien)
+            .getMany();
         this.#logger.debug('find: autos=%o', autos);
-        if(autos.length === 0) {
+        if (autos.length === 0) {
             throw new NotFoundException(
                 `Keine Autos gefunden:  ${JSON.stringify(suchkriterien)}`,
             );
@@ -114,7 +122,7 @@ export class AutoReadService {
 
         return autos;
     }
-    
+
     #checkKeys(keys: string[]) {
         let validKeys = true;
         keys.forEach((key) => {
