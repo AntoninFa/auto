@@ -33,7 +33,7 @@ describe('GET /rest/:id', () => {
         client = axios.create({
             baseURL,
             httpsAgent,
-            validateStatus: (status : number) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
+            validateStatus: (status: number) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
         });
     });
 

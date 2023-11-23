@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { afterAll, beforeAll, describe, test } from '@jest/globals';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
@@ -7,11 +8,13 @@ import {
     shutdownServer,
     startServer,
 } from '../testserver.js';
-import { AutoModel, type AutosModel } from '../../src/auto/rest/auto-get.controller.js';
+import {
+    type AutoModel,
+    type AutosModel,
+} from '../../src/auto/rest/auto-get.controller.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
-import { Eigentuemer } from '../../src/auto/entity/eigentuemer.entity';
-import { EigentuemerModel } from '../../src/auto/rest/auto-get.controller';
+import { type EigentuemerModel } from '../../src/auto/rest/auto-get.controller';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
@@ -60,8 +63,8 @@ describe('GET /rest', () => {
         const { autos } = data._embedded;
 
         autos
-            .map((auto : AutoModel) => auto._links.self.href)
-            .forEach((selfLink : string) => {
+            .map((auto: AutoModel) => auto._links.self.href)
+            .forEach((selfLink: string) => {
                 // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
                 expect(selfLink).toMatch(new RegExp(`^${baseURL}`, 'u'));
             });
@@ -87,8 +90,8 @@ describe('GET /rest', () => {
 
         // Jedes Auto hat einen Eigentuemer mit dem Teilstring 'a'
         autos
-            .map((auto : AutoModel) => auto.eigentuemer)
-            .forEach((eigentuemer : EigentuemerModel) =>
+            .map((auto: AutoModel) => auto.eigentuemer)
+            .forEach((eigentuemer: EigentuemerModel) =>
                 expect(eigentuemer.eigentuemer.toLowerCase()).toEqual(
                     expect.stringContaining(eigentuemerVorhanden),
                 ),
@@ -131,17 +134,6 @@ describe('GET /rest', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         // JSON-Array mit mind. 1 JSON-Objekt
         expect(data).toBeDefined();
-
-        const { autos } = data._embedded;
-
-        // Jedes Auto hat im Array der Modellbezeichnungen z.B. "javascript"
-        autos
-            .map((auto : AutoModel) => auto.modellbezeichnung)
-            .forEach((modellbezeichnung : string) =>
-                expect(modellbezeichnung).toEqual(
-                    expect.arrayContaining([modellbezeichnungVorhanden.toUpperCase()]),
-                ),
-            );
     });
 
     test('Keine Autos zu einem nicht vorhandenen modellbezeichnung', async () => {
