@@ -25,7 +25,7 @@ type AutoDTO = Omit<Auto, 'ausstattungen' | 'aktualisiert' | 'erzeugt'>;
 // -----------------------------------------------------------------------------
 const idVorhanden = '1';
 
-const eigentuemerVorhanden = 'Max';
+const eigentuemerVorhanden = 'Max Rimmelspacher';
 
 const teilEigentuemerVorhanden = 'a';
 

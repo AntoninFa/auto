@@ -35,7 +35,7 @@ export class LoginResolver {
         const user = await this.#service.validate({ username, pass: password });
         if (user === undefined) {
             throw new BadUserInputError(
-                'Benutzername oder Passwort sind falsch',
+                'Benutzername, oder Passwort sind falsch',
             );
         }
         const result = await this.#service.login(user);
