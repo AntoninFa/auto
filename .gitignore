@@ -2,7 +2,11 @@
 # compilierter Output
 /dist
 
+#Sever log
 /log
+
+#SonarQube Dateien
+/.scannerwork
 
 # coverage Reports from test coverage reports
 *coverage
