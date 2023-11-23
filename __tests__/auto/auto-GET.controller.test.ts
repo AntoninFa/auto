@@ -11,18 +11,18 @@ import {
 import {
     type AutoModel,
     type AutosModel,
+    type EigentuemerModel,
 } from '../../src/auto/rest/auto-get.controller.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
-import { type EigentuemerModel } from '../../src/auto/rest/auto-get.controller';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const eigentuemerVorhanden = 'a';
+const eigentuemerVorhanden = 'anna schmidt';
 const eigentuemerNichtVorhanden = 'xx';
-const modellbezeichnungVorhanden = 'javascript';
-const modellbezeichnungNichtVorhanden = 'csharp';
+const modellbezeichnungVorhanden = 'A3';
+const modellbezeichnungNichtVorhanden = 'F10';
 
 // -----------------------------------------------------------------------------
 // T e s t s

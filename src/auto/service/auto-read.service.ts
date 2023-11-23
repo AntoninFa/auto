@@ -71,7 +71,7 @@ export class AutoReadService {
             .buildId({ id, mitAusstattung })
             .getOne();
         if (auto === null) {
-            throw new NotFoundException(`Es gibt kein Auto mit der ID ${id}.`);
+            throw new NotFoundException(`Es gibt kein Auto mit der ID: ${id}.`);
         }
 
         if (this.#logger.isLevelEnabled('debug')) {

@@ -128,7 +128,7 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toBe(`Es gibt kein Auto mit der ID ${id}.`);
+        expect(message).toBe(`Es gibt kein Auto mit der ID: ${id}.`);
         expect(path).toBeDefined();
         expect(path![0]).toBe('auto');
         expect(extensions).toBeDefined();

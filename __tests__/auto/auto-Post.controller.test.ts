@@ -171,7 +171,11 @@ describe('POST /rest', () => {
 
         const { message, statusCode } = data;
 
-        expect(message).toEqual(expect.stringContaining('ISBN'));
+        expect(message).toEqual(
+            expect.stringMatching(
+                'Es existiert berits ein Auto mit der fin: 1HGCM82633A123456',
+            ),
+        );
         expect(statusCode).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
     });
 
