@@ -231,7 +231,7 @@ export class AutoGetController {
         @Query() query: AutoQuery,
         @Req() req: Request,
         @Res() res: Response,
-    ): Promise<Response<AutoModel | undefined>> {
+    ): Promise<Response<AutosModel | undefined>> {
         this.#logger.debug('get: query=%o', query);
 
         if (req.accepts([APPLICATION_HAL_JSON, 'json', 'html']) === false) {
@@ -243,16 +243,14 @@ export class AutoGetController {
         this.#logger.debug('get: %o', autos);
 
         // HATEOAS: Atom Links je Auto
-        const autosModel = autos.map(
-            (auto: Auto): AutoModel => this.#toModel(auto, req, false),
-        );
+        const autosModel = autos.map((auto) => this.#toModel(auto, req, false));
         this.#logger.debug('get: autoModel=%o', autosModel);
 
         const result: AutosModel = { _embedded: { autos: autosModel } };
         return res.contentType(APPLICATION_HAL_JSON).json(result).send();
     }
 
-    #toModel(auto: Auto, req: Request, all = true): AutoModel {
+    #toModel(auto: Auto, req: Request, all = true) {
         const baseUri: string = getBaseUri(req);
         this.#logger.debug('#toModel: baseUri=%s', baseUri);
         const { id } = auto;
