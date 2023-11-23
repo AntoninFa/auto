@@ -4,6 +4,9 @@
 
 /log
 
+# coverage Reports from test coverage reports
+*coverage
+
 # von npm Abhängige Dateien
 /node_modules
 

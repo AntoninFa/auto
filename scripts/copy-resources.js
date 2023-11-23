@@ -6,10 +6,6 @@ const { existsSync, mkdirSync } = fs;
 const { copySync } = fsExtra;
 const { join } = path
 
-if (!fs.existsSync(dist)) {
-    fs.mkdirSync(dist);
-}
-
 const src = 'src';
 const dist = 'dist';
 if (!existsSync(dist)) {
