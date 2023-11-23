@@ -8,7 +8,6 @@ import { AppModule } from '../src/app.module.js';
 import { NestFactory } from '@nestjs/core';
 import { v2 as compose } from 'docker-compose';
 import { config } from '../src/config/app.js';
-import { dbType } from '../src/config/dbtype.js';
 import { env } from '../src/config/env.js';
 import isPortReachable from 'is-port-reachable';
 import { join } from 'node:path';
@@ -27,34 +26,12 @@ const dbPort: number = (typeOrmModuleOptions as any).port;
 // Verzeichnis mit compose.yml ausgehend vom Wurzelverzeichnis
 const dockerComposeDir = join('.extras', 'compose');
 
-let dbHealthCheck: string;
-switch (dbType) {
-    case 'postgres': {
-        dbHealthCheck = 'until pg_isready ; do sleep 1; done';
-        break;
-    }
-    case 'mysql': {
-        dbHealthCheck = 'until ping ; do sleep 1; done';
-        break;
-    }
-    // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
-    case 'sqlite': {
-        dbHealthCheck = '';
-        break;
-    }
-    default: {
-        throw new Error('Der DB-Container wird nicht unterstuetzt');
-    }
-}
-
+let dbHealthCheck: 'until pg_isready ; do sleep 1; done';
 // -----------------------------------------------------------------------------
 // D B - S e r v e r   m i t   D o c k e r   C o m p o s e
 // -----------------------------------------------------------------------------
 const startDbServer = async () => {
     // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
-    if (dbType === 'sqlite') {
-        return;
-    }
     const isDBReachable = await isPortReachable(dbPort, { host: 'localhost' });
     if (isDBReachable) {
         return;
@@ -64,8 +41,8 @@ const startDbServer = async () => {
     try {
         await compose.upAll({
             cwd: dockerComposeDir,
-            commandOptions: [dbType],
-            composeOptions: [['-f', `compose.${dbType}.yml`]],
+            commandOptions: ['postgres'],
+            composeOptions: [['-f', `compose.${'postgres'}.yml`]],
             // Logging beim Hochfahren des DB-Containers
             log: true,
         });
@@ -75,16 +52,13 @@ const startDbServer = async () => {
     }
 
     // Ist der DB-Server im Container bereit fuer DB-Anfragen?
-    await compose.exec(dbType, ['sh', '-c', dbHealthCheck], {
+    await compose.exec('postgres', ['sh', '-c', dbHealthCheck], {
         cwd: dockerComposeDir,
     });
 };
 
 const shutdownDbServer = async () => {
     // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
-    if (dbType === 'sqlite') {
-        return;
-    }
     await compose.down({
         cwd: dockerComposeDir,
         composeOptions: [['-f', 'compose.postgres.yml']],
