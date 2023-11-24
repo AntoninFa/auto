@@ -29,7 +29,7 @@ pipeline {
                 sh 'rm -rf .extras/doc/api'
                 sh 'rm -rf .extras/doc/folien/folien.html'
                 sh 'rm -rf .extras/doc/projekthandbuch/html'
-                git url: 'https://github.com/AntoninFa/auto', branch: 'main', poll: true
+                git url: 'https://github.com/AntoninFa/auto', branch: 'jenkins-test', poll: true
             }
         }
 
@@ -135,7 +135,7 @@ pipeline {
                             sh 'rm auto.zip'
                         }
                     }
-                    zip zipFile: 'auto.zip', archive: false, dir: 'dist'
+                    zip zipFile: 'auto.zip', dir: 'dist'
                     archiveArtifacts 'auto.zip'
                 }
             }
