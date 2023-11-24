@@ -1,0 +1,72 @@
+' Preview durch <Alt>d
+
+@startuml Entity
+
+package typeorm {
+  class "@Entity" as Entity
+  hide Entity circle
+  class "@Column" as Column
+  hide Column circle
+  class "@PrimaryColumn" as PrimaryColumn
+  hide PrimaryColumn circle
+  class "@OneToMany" as OneToMany
+  hide OneToMany circle
+  class "@JoinColumn" as JoinColumn
+  hide JoinColumn circle
+  class "@ManyToOne" as ManyToOne
+  hide ManyToOne circle
+  class "@CreateDateColumn" as CreateDateColumn
+  hide CreateDateColumn circle
+  class "@UpdateDateColumn" as UpdateDateColumn
+  hide UpdateDateColumn circle
+}
+
+package auto.entity {
+  class "type HerstellerType = 'VOLKSWAGEN' | 'AUDI' | 'DAIMLER' | 'RENAULT'" as HerstellerType
+  hide HerstellerType circle
+
+  class "type GetriebeType = 'MANUELL' | 'AUTOMATIK'" as GetriebeType
+  hide GetriebeType circle
+
+  class Auto <<entity>> <<@Entity>> {
+    @Column() @PrimaryColumn() readonly id: number
+    @Column() readonly version: number
+    @Column() readonly modellbezeichnung: string
+    @Column() readonly hersteller: HerstellerType
+    @Column() readonly fin: string
+    @Column() readonly kilometerstand: number
+    @Column() readonly auslieferungstag: Date
+    @Column() readonly grundpreis: number
+    @Column() readonly istAktuellesModell: boolean
+    @Column() readonly getriebeArt: GetriebeType 
+    @CreateDateColumn() readonly erzeugt: Date
+    @UpdateDateColumn() readonly aktualisiert: Date
+  }
+
+  class Eigentuemer <<entity>> <<@Entity>> {
+    @Column() @PrimaryColumn() readonly id: number
+    @Column() readonly eigentuemer: string
+    @Column() readonly geburtsdatum?: Date
+    @Column() readonly fuehrerscheinnummer?: string
+  }
+
+  class Ausstattung <<entity>> <<@Entity>> {
+    @Column() @PrimaryColumn() readonly id: number
+    @Column() readonly bezeichnung: string
+    @Column() readonly preis?: number
+    @Column() readonly verfuegbar?: boolean
+  }
+
+  Auto *--> "1" Eigentuemer : @OneToOne() \neigentuemer
+  Auto *--> "*" Ausstattung : @OneToMany() \nausstattung
+
+  Auto .right.> Entity
+  Auto .right.> HerstellerType
+  Auto .left.> GetriebeType
+}
+
+hide empty members
+
+footer (c) Gruppe1
+
+@enduml
