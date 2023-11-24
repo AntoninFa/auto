@@ -52,6 +52,7 @@ pipeline {
                 sh 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg'
                 sh 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list'
                 sh 'apt-get update'
+                sh 'apt install zip --yes'
                 sh 'apt-get install nodejs --no-install-recommends --yes --show-progress'
                 sh 'apt-cache policy nodejs'
 
@@ -135,22 +136,24 @@ pipeline {
                             sh 'rm auto.zip'
                         }
                     }
-                    zip zipFile: 'auto.zip', dir: 'dist'
+                    // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
+                    zip zipFile: 'auto.zip', archive: false, dir: 'dist'
+                    // jobs/auto/builds/.../archive/auto.zip
                     archiveArtifacts 'auto.zip'
                 }
             }
         }
 
-        stage('Docker Image bauen') {
+          stage('Docker Image bauen') {
             steps {
                 echo 'TODO: Docker-Image bauen und veroeffentlichen'
             }
-        }
+        } 
 
-        stage('Deployment fuer Kubernetes') {
+         stage('Deployment fuer Kubernetes') {
             steps {
                 echo 'TODO: Deployment fuer Kubernetes mit z.B. Ansible, Terraform'
             }
-        }
-    }
+        } 
+    } 
 }

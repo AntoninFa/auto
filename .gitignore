@@ -16,7 +16,7 @@
 
 # Generierte Dateien
 build
-package-lock.json
+#package-lock.json
 
 # IDE - VSCode
 .vscode/*
