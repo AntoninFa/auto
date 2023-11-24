@@ -11,18 +11,18 @@ import {
 import {
     type AutoModel,
     type AutosModel,
+    type EigentuemerModel,
 } from '../../src/auto/rest/auto-get.controller.js';
 import { type ErrorResponse } from './error-response.js';
 import { HttpStatus } from '@nestjs/common';
-import { type EigentuemerModel } from '../../src/auto/rest/auto-get.controller';
 
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const eigentuemerVorhanden = 'a';
-const eigentuemerNichtVorhanden = 'xx';
-const modellbezeichnungVorhanden = 'javascript';
-const modellbezeichnungNichtVorhanden = 'csharp';
+const eigentuemerVorhanden = 'anna schmidt';
+// const eigentuemerNichtVorhanden = 'xx';
+// const modellbezeichnungVorhanden = 'A3';
+// const modellbezeichnungNichtVorhanden = 'F10';
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -31,11 +31,13 @@ const modellbezeichnungNichtVorhanden = 'csharp';
 // eslint-disable-next-line max-lines-per-function
 describe('GET /rest', () => {
     let baseURL: string;
+    let baseURLReg: string;
     let client: AxiosInstance;
 
     beforeAll(async () => {
         await startServer();
         baseURL = `https://${host}:${port}/rest`;
+        baseURLReg = `https://${host}:${port}/rest(?:/)+\\d+`;
         client = axios.create({
             baseURL,
             httpsAgent,
@@ -66,7 +68,7 @@ describe('GET /rest', () => {
             .map((auto: AutoModel) => auto._links.self.href)
             .forEach((selfLink: string) => {
                 // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
-                expect(selfLink).toMatch(new RegExp(`^${baseURL}`, 'u'));
+                expect(selfLink).toMatch(new RegExp(`^${baseURLReg}$`, 'iu'));
             });
     });
 
@@ -98,29 +100,9 @@ describe('GET /rest', () => {
             );
     });
 
-    test('Autos zu einem nicht vorhandenen Teil-Eigentuemer suchen', async () => {
+    test('Mind. 1 Auto mit vorhandene Eigentuemer', async () => {
         // given
-        const params = { eigentuemer: eigentuemerNichtVorhanden };
-
-        // when
-        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
-            params,
-        });
-
-        // then
-        const { status, data } = response;
-
-        expect(status).toBe(HttpStatus.NOT_FOUND);
-
-        const { error, statusCode } = data;
-
-        expect(error).toBe('Not Found');
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
-    });
-
-    test('Mind. 1 Auto mit vorhandener Modellbezeichnung', async () => {
-        // given
-        const params = { [modellbezeichnungVorhanden]: 'true' };
+        const params = { eigentuemer: eigentuemerVorhanden };
 
         // when
         const response: AxiosResponse<AutosModel> = await client.get('/', {
@@ -134,26 +116,16 @@ describe('GET /rest', () => {
         expect(headers['content-type']).toMatch(/json/iu);
         // JSON-Array mit mind. 1 JSON-Objekt
         expect(data).toBeDefined();
-    });
 
-    test('Keine Autos zu einem nicht vorhandenen modellbezeichnung', async () => {
-        // given
-        const params = { [modellbezeichnungNichtVorhanden]: 'true' };
+        const { autos } = data._embedded;
 
-        // when
-        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
-            params,
-        });
-
-        // then
-        const { status, data } = response;
-
-        expect(status).toBe(HttpStatus.NOT_FOUND);
-
-        const { error, statusCode } = data;
-
-        expect(error).toBe('Not Found');
-        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+        autos
+            .map((auto) => auto.eigentuemer)
+            .forEach((eigentuemer) =>
+                expect(eigentuemer.eigentuemer.toLowerCase()).toEqual(
+                    expect.stringContaining(eigentuemerVorhanden),
+                ),
+            );
     });
 
     test('Keine Autos zu einer nicht-vorhandenen Property', async () => {

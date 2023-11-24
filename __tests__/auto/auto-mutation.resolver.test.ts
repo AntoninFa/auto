@@ -219,7 +219,7 @@ describe('GraphQL Mutations', () => {
                   input: {
                       id: "1",
                       version: 0,
-                      fin: "1HGCM82633A123477",
+                      fin: "1HGCM82633A123489",
                       modellbezeichnung: "Golf",
                       hersteller: VOLKSWAGEN,
                       kilometerstand: 10,
@@ -256,19 +256,20 @@ describe('GraphQL Mutations', () => {
         const token = await loginGraphQL(client);
         // eslint-disable-next-line @typescript-eslint/naming-convention
         const authorization = { Authorization: `Bearer ${token}` };
+        const id = '1';
         const body: GraphQLQuery = {
             query: `
             mutation {
                 update(
                   input: {
-                      id: "1",
+                    id: "${id}",
                       version: 0,
-                      fin: "1HGCM82633A123477",
+                      fin: "dfds",
                       modellbezeichnung: "Golf",
                       hersteller: VOLKSWAGEN,
-                      kilometerstand: 10,
-                      auslieferungstag: "2022-01-01",
-                      grundpreis: 200023,
+                      kilometerstand: -10,
+                      auslieferungstag: "2022-01-70",
+                      grundpreis: -10,
                       istAktuellesModell: true,
                       getriebeArt: MANUELL
                   }
@@ -282,6 +283,7 @@ describe('GraphQL Mutations', () => {
             expect.stringMatching(/^fin /u),
             expect.stringMatching(/^grundpreis /u),
             expect.stringMatching(/^auslieferungstag /u),
+            expect.stringMatching(/^kilometerstand /u),
         ];
 
         const response: AxiosResponse<GraphQLResponseBody> = await client.post(
@@ -301,6 +303,7 @@ describe('GraphQL Mutations', () => {
 
         const [error] = errors!;
         const { message } = error;
+
         const messages: string[] = message.split(',');
 
         expect(messages).toBeDefined();
