@@ -129,28 +129,31 @@ pipeline {
                   ]
                 }
 
-                success {
+                  success {
                     script {
                         if (fileExists("${env.WORKSPACE}/auto.zip")) {
                             sh 'rm auto.zip'
                         }
+                          // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
+                        zip zipFile: 'auto.zip', archive: true, dir: 'dist'
+                        // jobs/auto/builds/.../archive/auto.zip
+                        archiveArtifacts 'auto.zip'                    
                     }
-                    zip zipFile: 'auto.zip', dir: 'dist'
-                    archiveArtifacts 'auto.zip'
+                   
                 }
             }
         }
 
-        stage('Docker Image bauen') {
+        /*  stage('Docker Image bauen') {
             steps {
                 echo 'TODO: Docker-Image bauen und veroeffentlichen'
             }
-        }
+        } */
 
-        stage('Deployment fuer Kubernetes') {
+       /*  stage('Deployment fuer Kubernetes') {
             steps {
                 echo 'TODO: Deployment fuer Kubernetes mit z.B. Ansible, Terraform'
             }
-        }
-    }
+        } */
+    } 
 }
