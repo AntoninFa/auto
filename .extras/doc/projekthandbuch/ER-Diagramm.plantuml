@@ -1,0 +1,48 @@
+@startuml ER Diagramm
+
+' hide the spot
+hide circle
+
+' evtl. Prbleme mit Kraehenfuessen vermeiden
+skinparam linetype ortho
+
+entity "Auto" {
+  * id: integer <<generated>>
+  --
+  * version: integer
+  * modellbezeichnung: text
+  * hersteller: text
+  * fin: text
+  * kilometerstand: number
+    aulsiferungstag: date
+    grundpreis: number
+  * istAktuellesModell: boolean
+  * **eigentuemer_id**: integer <<FK>>
+    getriebeArt: text
+  * erzeugt: timestamp
+  * aktualisiert: timestamp
+}
+
+entity "Eigentuemer" {
+  * id: integer <<generated>>
+  --
+  * eigentuemer: text
+  * geburtsdatum: date
+    fuehrerscheinnummer: number
+}
+
+entity "Ausstattung" {
+  * id: integer <<generated>>
+  --
+  * bezeichnung: text
+    preis: number
+    verfuegbar: boolean
+  * **auto_id**: integer <<FK>>
+}
+
+Buch ||..|| Eigentuemer
+Buch ||..o{ Ausstattung
+
+footer (c) Gruppe1
+
+@enduml

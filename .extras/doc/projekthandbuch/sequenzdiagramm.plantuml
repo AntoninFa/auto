@@ -1,0 +1,17 @@
+ Preview durch <Alt>d
+
+@startuml Sequenzdiagramm
+
+actor Gast
+
+boundary AutoGetController
+control AutoReadService
+database auto
+
+Gast -> AutoGetController : GET / getById()
+AutoGetController -> AutoReadService: findById()
+AutoReadService -> auto: [TypeORM]
+
+footer (c) Gruppe1
+
+@enduml

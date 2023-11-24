@@ -1,0 +1,61 @@
+@startuml Komponenten
+
+left to right direction
+
+actor RESTClient
+actor GraphQLClient
+
+node "Nest" {
+  [RequestLoggerMiddleware]
+
+  [AutoController]
+  [AutoResolver]
+
+  [AutoService]
+
+  [Repository<Auto>]
+
+  [MailService]
+}
+
+
+cloud {
+    [TypeORM]
+}
+
+cloud {
+    [nodemailer]
+}
+
+database "DB auto" {
+    [Tabelle auto]
+    [Tabelle eigentuemer]
+    [Tabelle ausstattung]
+}
+
+node {
+    [Mailserver]
+}
+
+RESTClient ~~> [RequestLoggerMiddleware]
+GraphQLClient ~~> [RequestLoggerMiddleware]
+
+[RequestLoggerMiddleware] ~~> [AutoController]
+[RequestLoggerMiddleware] ~~> [AutoResolver]
+
+[AutoController] ..> [AutoService]
+[AutoResolver] ..> [AutoService]
+[AutoService] ..> [Repository<Auto>]
+
+[Repository<Auto>] ~~> [TypeORM]
+[TypeORM] ~~> [Tabelle auto]
+[TypeORM] ~~> [Tabelle eigentuemer]
+[TypeORM] ~~> [Tabelle ausstattung]
+
+[AutoService] ..> [MailService]
+[MailService] ~~> [nodemailer]
+[nodemailer] ~~> [Mailserver]
+
+footer (c) Gruppe1
+
+@enduml
