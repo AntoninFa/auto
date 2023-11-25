@@ -134,10 +134,11 @@ pipeline {
                         if (fileExists("${env.WORKSPACE}/auto.zip")) {
                             sh 'rm auto.zip'
                         }
-                          // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
-                        zip zipFile: 'auto.zip', archive: true, dir: 'dist'
-                        // jobs/auto/builds/.../archive/auto.zip
-                        archiveArtifacts 'auto.zip'                    
+                        def sourceFolder = 'dist/' // Replace 'folder_to_archive' with your folder name
+                         def zipFile = "auto.zip"
+                         zip zipFile: zipFile, dir: sourceFolder
+                        // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
+                        archiveArtifacts artifacts: 'auto.zip', allowEmptyArchive: true, archive: false                        
                     }
                    
                 }
