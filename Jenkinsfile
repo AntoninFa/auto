@@ -29,7 +29,7 @@ pipeline {
                 sh 'rm -rf .extras/doc/api'
                 sh 'rm -rf .extras/doc/folien/folien.html'
                 sh 'rm -rf .extras/doc/projekthandbuch/html'
-                git url: 'https://github.com/AntoninFa/auto', branch: 'jenkins-test', poll: true
+                git url: 'https://github.com/AntoninFa/auto', branch: 'test', poll: true
             }
         }
 
@@ -52,6 +52,7 @@ pipeline {
                 sh 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg'
                 sh 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list'
                 sh 'apt-get update'
+                sh 'apt install zip --yes'
                 sh 'apt-get install nodejs --no-install-recommends --yes --show-progress'
                 sh 'apt-cache policy nodejs'
 
@@ -99,7 +100,7 @@ pipeline {
                     },
                     'TypeDoc': {
                         sh 'npx typedoc --version'
-                         sh 'npm run typedoc'
+                        sh 'npm run typedoc'
                     }
                 )
             }
@@ -134,27 +135,25 @@ pipeline {
                         if (fileExists("${env.WORKSPACE}/auto.zip")) {
                             sh 'rm auto.zip'
                         }
-                        def sourceFolder = 'dist/' // Replace 'folder_to_archive' with your folder name
-                         def zipFile = "auto.zip"
-                         zip zipFile: zipFile, dir: sourceFolder
-                        // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
-                        archiveArtifacts artifacts: 'auto.zip', allowEmptyArchive: true, archive: false                        
                     }
-                   
+                    // https://www.jenkins.io/doc/pipeline/steps/pipeline-utility-steps/#zip-create-zip-file
+                    zip zipFile: 'auto.zip', archive: false, dir: 'dist'
+                    // jobs/auto/builds/.../archive/auto.zip
+                    archiveArtifacts 'auto.zip'
                 }
             }
         }
 
-        /*  stage('Docker Image bauen') {
+          stage('Docker Image bauen') {
             steps {
                 echo 'TODO: Docker-Image bauen und veroeffentlichen'
             }
-        } */
+        } 
 
-       /*  stage('Deployment fuer Kubernetes') {
+         stage('Deployment fuer Kubernetes') {
             steps {
                 echo 'TODO: Deployment fuer Kubernetes mit z.B. Ansible, Terraform'
             }
-        } */
+        } 
     } 
 }

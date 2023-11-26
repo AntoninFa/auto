@@ -20,9 +20,10 @@ import { HttpStatus } from '@nestjs/common';
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 const eigentuemerVorhanden = 'anna schmidt';
-// const eigentuemerNichtVorhanden = 'xx';
-// const modellbezeichnungVorhanden = 'A3';
-// const modellbezeichnungNichtVorhanden = 'F10';
+const eigentuemerNichtVorhanden = 'xx';
+const modellbezeichnungVorhanden = 'A3';
+const modellbezeichnungNichtVorhanden = 'F10';
+const herstellerVorhanden = 'DAIMLER';
 
 // -----------------------------------------------------------------------------
 // T e s t s
@@ -124,6 +125,82 @@ describe('GET /rest', () => {
             .forEach((eigentuemer) =>
                 expect(eigentuemer.eigentuemer.toLowerCase()).toEqual(
                     expect.stringContaining(eigentuemerVorhanden),
+                ),
+            );
+    });
+
+    test('Autos zu einem nicht vorhandenen Teil-Eigentuemer suchen', async () => {
+        const params = { eigentuemer: eigentuemerNichtVorhanden };
+
+        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
+            params,
+        });
+
+        const { status, data } = response;
+
+        expect(status).toBe(HttpStatus.NOT_FOUND);
+
+        const { error, statusCode } = data;
+
+        expect(error).toBe('Not Found');
+        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+    });
+
+    test('Suche nach Modellbezeichnung A3', async () => {
+        const params = { modellbezeichnung: modellbezeichnungVorhanden };
+
+        const response: AxiosResponse<AutosModel> = await client.get('/', {
+            params,
+        });
+        const { status, headers, data } = response;
+
+        expect(status).toBe(HttpStatus.OK);
+        expect(headers['content-type']).toMatch(/json/iu);
+        expect(data).toBeDefined();
+
+        const { autos } = data._embedded;
+        autos
+            .map((auto) => auto.modellbezeichnung)
+            .forEach((modellbezeichnung) =>
+                expect(modellbezeichnung).toEqual(
+                    expect.stringContaining(modellbezeichnungVorhanden),
+                ),
+            );
+    });
+
+    test('Keine Autos zu einer nicht vorhandenen modellbezeichnung', async () => {
+        const params = { [modellbezeichnungNichtVorhanden]: 'true' };
+        const response: AxiosResponse<ErrorResponse> = await client.get('/', {
+            params,
+        });
+        const { status, data } = response;
+
+        expect(status).toBe(HttpStatus.NOT_FOUND);
+
+        const { error, statusCode } = data;
+
+        expect(error).toBe('Not Found');
+        expect(statusCode).toBe(HttpStatus.NOT_FOUND);
+    });
+
+    test('Suche nach Hersteller DAIMLER', async () => {
+        const params = { hersteller: herstellerVorhanden };
+
+        const response: AxiosResponse<AutosModel> = await client.get('/', {
+            params,
+        });
+        const { status, headers, data } = response;
+
+        expect(status).toBe(HttpStatus.OK);
+        expect(headers['content-type']).toMatch(/json/iu);
+        expect(data).toBeDefined();
+
+        const { autos } = data._embedded;
+        autos
+            .map((auto) => auto.hersteller)
+            .forEach((hersteller) =>
+                expect(hersteller).toEqual(
+                    expect.stringContaining(herstellerVorhanden),
                 ),
             );
     });

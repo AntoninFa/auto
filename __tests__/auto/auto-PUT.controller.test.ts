@@ -40,7 +40,7 @@ const geaendertesAutoIdNichtVorhanden: AutoDtoOhneRef = {
 const idNichtVorhanden = '420';
 
 const geaendertesAutoInvalid: Record<string, unknown> = {
-    modellbezeichnung: '!?',
+    modellbezeichnung: 'asölkfjksdafj4jkjj4ksklfjkajsdfjdlfdksfjksdjlfjklsdaf',
     hersteller: 'KEINER',
     fin: '58',
     kilometerstand: -3450,

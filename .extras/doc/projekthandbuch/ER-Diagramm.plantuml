@@ -40,8 +40,8 @@ entity "Ausstattung" {
   * **auto_id**: integer <<FK>>
 }
 
-Buch ||..|| Eigentuemer
-Buch ||..o{ Ausstattung
+Auto ||..|| Eigentuemer
+Auto ||..o{ Ausstattung
 
 footer (c) Gruppe1
 
