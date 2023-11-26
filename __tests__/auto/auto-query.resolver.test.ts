@@ -25,7 +25,7 @@ type AutoDTO = Omit<Auto, 'ausstattungen' | 'aktualisiert' | 'erzeugt'>;
 // -----------------------------------------------------------------------------
 const idVorhanden = '1';
 
-const eigentuemerVorhanden = 'Max';
+const eigentuemerVorhanden = 'Max Rimmelspacher';
 
 const teilEigentuemerVorhanden = 'a';
 
@@ -128,7 +128,7 @@ describe('GraphQL Queries', () => {
         const [error] = errors!;
         const { message, path, extensions } = error;
 
-        expect(message).toBe(`Es gibt kein Auto mit der ID ${id}.`);
+        expect(message).toBe(`Es gibt kein Auto mit der ID: ${id}.`);
         expect(path).toBeDefined();
         expect(path![0]).toBe('auto');
         expect(extensions).toBeDefined();

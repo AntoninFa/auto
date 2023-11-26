@@ -17,7 +17,6 @@ __tests__/auto/__snapshots__/auto-GET-id.controller.snapshot.test.ts.snap
 
 # Generierte Dateien
 build
-package-lock.json
 .extras/doc/dependency-check/*
 src/config/resources/jwt/private-key.pem
 src/config/resources/tls/private-key.pem
