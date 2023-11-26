@@ -3,13 +3,14 @@
 /dist
 
 #Sever log
-/log
+log
+logs
+*.log
+.scannerwork
 
-#SonarQube Dateien
-/.scannerwork
-
-# coverage Reports from test coverage reports
-*coverage
+# Tests
+coverage
+__tests__/auto/__snapshots__/auto-GET-id.controller.snapshot.test.ts.snap
 
 # von npm Abhängige Dateien
 /node_modules
@@ -17,6 +18,14 @@
 # Generierte Dateien
 build
 package-lock.json
+.extras/doc/dependency-check/*
+src/config/resources/jwt/private-key.pem
+src/config/resources/tls/private-key.pem
+.extras/doc/projekthandbuch/html/*
+.extras/doc/folien/*.html
+
+# Editors
+.env
 
 # IDE - VSCode
 .vscode/*

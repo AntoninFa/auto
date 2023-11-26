@@ -1,4 +1,5 @@
 # Aufruf:   docker compose up
+
 services:
   trivy:
     image: owasp/dependency-check:8.4.0
