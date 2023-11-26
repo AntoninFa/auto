@@ -99,7 +99,7 @@ pipeline {
                     },
                     'TypeDoc': {
                         sh 'npx typedoc --version'
-                        sh 'npm run typedoc'
+                         sh 'npm run typedoc'
                     }
                 )
             }
@@ -129,7 +129,7 @@ pipeline {
                   ]
                 }
 
-                  success {
+                success {
                     script {
                         if (fileExists("${env.WORKSPACE}/auto.zip")) {
                             sh 'rm auto.zip'
