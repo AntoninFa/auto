@@ -1,5 +1,3 @@
- Preview durch <Alt>d
-
 @startuml Sequenzdiagramm
 
 actor Gast
