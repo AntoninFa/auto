@@ -1,4 +1,4 @@
-= Projekthandauto
+= Projekthandbuch
 Gruppe1 <gruppe1@h-ka.de>
 :doctype: book
 :toc: left
