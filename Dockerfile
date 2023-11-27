@@ -7,15 +7,18 @@ WORKDIR /home/node
 COPY package.json package-lock.json nest-cli.json tsconfig*.json ./
 COPY src ./src
 
-RUN npm i -g --no-audit --no-fund npm
-
-RUN chmod 666 package*.json
+RUN <<EOF
+npm i -g --no-audit --no-fund npm
+chmod 666 package*.json
+EOF
 
 USER node
 
-RUN npm ci --no-audit --no-fund
-RUN npm i -D --no-audit --no-fund rimraf
-RUN npm run build
+RUN <<EOF
+npm ci --no-audit --no-fund
+npm i -D --no-audit --no-fund rimraf
+npm run build
+EOF
 
 FROM node:${NODE_VERSION}-bookworm-slim AS deps
 WORKDIR /home/node
@@ -28,13 +31,15 @@ RUN npm prune --omit=dev --omit=peer
 # STAGE  DUMB-INIT
 FROM debian:bookworm-slim AS dumb-init
 
-RUN apt-get update
-RUN apt-get upgrade
-RUN apt-get install --no-install-recommends -y dumb-init=1.2.5-2
-RUN apt-get autoremove --yes
-RUN apt-get clean --yes
-RUN rm -rf /var/lib/apt/lists/*
-RUN rm -rf /tmp/*
+RUN <<EOF
+apt-get update
+apt-get upgrade
+apt-get install --no-install-recommends -y dumb-init=1.2.5-2
+apt-get autoremove --yes
+apt-get clean --yes
+rm -rf /var/lib/apt/lists/*
+rm -rf /tmp/*
+EOF
 
 # STAGE FINAL
 FROM gcr.io/distroless/nodejs20-debian12:nonroot
