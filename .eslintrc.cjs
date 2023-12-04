@@ -1,12 +1,15 @@
 module.exports = {
     root: true,
+    // https://eslint.org/docs/latest/use/configure/language-options#specifying-environments
     env: {
         node: true,
         es2022: true,
         jest: true,
     },
     parser: '@typescript-eslint/parser',
+    // https://eslint.org/docs/latest/use/configure/language-options#specifying-parser-options
     parserOptions: {
+        // https://typescript-eslint.io/blog/parser-options-project-true
         project: true,
         ecmaVersion: '2022',
         sourceType: 'module',
@@ -78,9 +81,6 @@ module.exports = {
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended-type-checked.ts
         // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/stylistic-type-checked.ts
         '@typescript-eslint/array-type': ['error', { default: 'array'}],
-        '@typescript-eslint/brace-style': 'error',
-        '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
-        '@typescript-eslint/comma-spacing': 'error',
         '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
         '@typescript-eslint/consistent-type-exports': 'error',
         '@typescript-eslint/consistent-type-imports': 'error',
@@ -88,11 +88,7 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/explicit-member-accessibility': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/func-call-spacing': 'error',
         '@typescript-eslint/interface-name-prefix': 'off',
-        //'@typescript-eslint/key-spacing': 'error',
-        //'@typescript-eslint/keyword-spacing': 'error',
-        '@typescript-eslint/lines-between-class-members': 'error',
         '@typescript-eslint/member-ordering': 'error',
         '@typescript-eslint/method-signature-style': 'error',
         '@typescript-eslint/naming-convention': [
@@ -138,8 +134,6 @@ module.exports = {
             allow: ['arrowFunctions'],
         }],
         '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-extra-parens': 'error',
-        '@typescript-eslint/no-extra-semi': 'error',
         '@typescript-eslint/no-floating-promises': ['error', {
             ignoreIIFE: true
         }],
@@ -168,6 +162,7 @@ module.exports = {
         '@typescript-eslint/no-unnecessary-qualifier': 'error',
         '@typescript-eslint/no-unnecessary-type-arguments': 'error',
         '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-unary-minus': 'error',
         //'@typescript-eslint/no-untyped-public-signature': 'error',
         '@typescript-eslint/no-unused-vars': ['off', {
             ignoreRestSiblings: true,
@@ -180,8 +175,6 @@ module.exports = {
         '@typescript-eslint/no-useless-constructor': 'error',
         '@typescript-eslint/no-useless-empty-export': 'error',
         '@typescript-eslint/non-nullable-type-assertion-style': 'error',
-        '@typescript-eslint/object-curly-spacing': ['error', 'always'],
-        '@typescript-eslint/padding-line-between-statements': 'error',
         '@typescript-eslint/prefer-destructuring': 'error',
         '@typescript-eslint/prefer-enum-initializers': 'error',
         '@typescript-eslint/prefer-includes': 'error',
@@ -204,13 +197,6 @@ module.exports = {
             allowNullish: true,
         }],
         '@typescript-eslint/return-await': 'error',
-        '@typescript-eslint/semi': 'error',
-        '@typescript-eslint/space-before-blocks': 'error',
-        '@typescript-eslint/space-before-function-paren': ['error', {
-            anonymous: 'never',
-            named: 'never',
-        }],
-        '@typescript-eslint/space-infix-ops': 'error',
         '@typescript-eslint/strict-boolean-expressions': 'error',
         '@typescript-eslint/type-annotation-spacing': 'error',
         '@typescript-eslint/unbound-method': ['error', {
@@ -326,26 +312,11 @@ module.exports = {
         'unicorn/string-content': 'error',
 
         // https://eslint.org/docs/rules
-        'array-bracket-newline': ['error', {
-            multiline: true,
-        }],
-        'array-bracket-spacing': 'error',
         // https://github.com/prettier/eslint-config-prettier#arrow-body-style-and-prefer-arrow-callback
         // https://eslint.org/docs/rules/arrow-body-style
         'arrow-body-style': ['error', 'as-needed'],
-        'arrow-parens': 'error',
-        'arrow-spacing': 'error',
         'block-scoped-var': 'error',
-        'block-spacing': 'error',
-        // siehe @typescript-eslint/brace-style
-        'brace-style': 'off',
         'camelcase': 'error',
-        // siehe @typescript-eslint/comma-dangle
-        'comma-dangle': 'off',
-        // siehe @typescript-eslint/comma-spacing
-        'comma-spacing': 'off',
-        'comma-style': 'error',
-        'computed-property-spacing': 'error',
         'consistent-this': 'error',
         // https://github.com/prettier/eslint-config-prettier#curly
         // https://eslint.org/docs/rules/curly
@@ -356,33 +327,16 @@ module.exports = {
         // siehe @typescript-eslint/dot-notation
         'dot-notation': 'off',
         'eqeqeq': 'error',
-        'eol-last': 'error',
         'for-direction': 'error',
-        // siehe @typescript-eslint/func-call-spacing
-        'func-call-spacing': 'off',
         'func-name-matching': 'error',
         'func-names': ['error', 'never'],
         'func-style': 'error',
         'getter-return': 'error',
         'grouped-accessor-pairs': 'error',
         'handle-callback-err': 'error',
-        // siehe @typescript-eslint/key-spacing
-        'key-spacing': 'off',
-        'keyword-spacing': 'error',
-        // 'line-comment-position': 'error',
-        'linebreak-style': 'error',
         'logical-assignment-operators': 'error',
         'max-classes-per-file': 'error',
         'max-depth': 'error',
-        // https://github.com/prettier/eslint-config-prettier#max-len
-        // https://eslint.org/docs/rules/max-len
-        'max-len': ['error', {
-            ignoreComments: true,
-            ignoreTrailingComments: true,
-            ignoreStrings: true,
-            ignoreTemplateLiterals: true,
-            ignoreUrls: true,
-        }],
         'max-lines': 'error',
         'max-lines-per-function': ['error', {
             max: 60,
@@ -394,18 +348,11 @@ module.exports = {
         'max-statements': ['error', {
             max: 25
         }],
-        'max-statements-per-line': 'error',
-        'new-parens': 'error',
         'no-alert': 'error',
         'no-array-constructor': 'error',
         'no-bitwise': 'error',
         'no-buffer-constructor': 'error',
         'no-caller': 'error',
-        // https://github.com/prettier/eslint-config-prettier#no-confusing-arrow
-        // https://eslint.org/docs/rules/no-confusing-arrow
-        'no-confusing-arrow': ['error', {
-            allowParens: false,
-        }],
         'no-console': 'off',
         'no-constant-binary-expression': 'error',
         'no-constructor-return': 'error',
@@ -420,10 +367,6 @@ module.exports = {
         'no-extend-native': 'error',
         'no-extra-bind': 'error',
         'no-extra-label': 'error',
-        // siehe @typescript-eslint/no-extra-parens
-        'no-extra-parens': 'off',
-        // siehe @typescript-eslint/no-extra-semi
-        'no-extra-semi': 'off',
         'no-implicit-coercion': 'error',
         'no-implicit-globals': 'error',
         'no-implied-eval': 'error',
@@ -440,8 +383,6 @@ module.exports = {
         // siehe @typescript-eslint/no-magic-numbers
         'no-magic-numbers': 'off',
         'no-multi-assign': 'error',
-        'no-multi-spaces': 'error',
-        'no-multiple-empty-lines': 'error',
         'no-negated-condition': 'error',
         'no-nested-ternary': 'error',
         'no-new': 'error',
@@ -468,10 +409,8 @@ module.exports = {
         // siehe @typescript-eslint/no-shadow
         'no-shadow': 'off',
         'no-shadow-restricted-names': 'error',
-        'no-tabs': 'error',
         'no-template-curly-in-string': 'error',
         'no-throw-literal': 'error',
-        'no-trailing-spaces': 'error',
         'no-undef-init': 'error',
         'no-underscore-dangle': 'error',
         'no-unmodified-loop-condition': 'error',
@@ -493,23 +432,10 @@ module.exports = {
         'no-useless-rename': 'error',
         'no-useless-return': 'error',
         'no-void': 'error',
-        'no-whitespace-before-property': 'error',
         'no-with': 'error',
-        'nonblock-statement-body-position': 'error',
-        'object-curly-newline': 'error',
-        // siehe @typescript-eslint/object-curly-spacing
-        'object-curly-spacing': 'off',
-        'object-property-newline': ['error', {
-            allowAllPropertiesOnSameLine: true,
-        }],
         'object-shorthand': 'error',
         'one-var': ['error', 'never'],
-        'one-var-declaration-per-line': 'error',
         'operator-assignment': 'error',
-        'operator-linebreak': 'error',
-        'padded-blocks': ['error', 'never'],
-        // siehe @typescript-eslint/padding-line-between-statements
-        'padding-line-between-statements': 'off',
         'prefer-arrow-callback': 'error',
         'prefer-exponentiation-operator': 'error',
         'prefer-numeric-literals': 'error',
@@ -521,36 +447,13 @@ module.exports = {
         }],
         'prefer-rest-params': 'error',
         'prefer-template': 'error',
-        'quote-props': ['error', 'as-needed'],
-        // https://github.com/prettier/eslint-config-prettier#quotes
-        // https://eslint.org/docs/rules/quotes
-        'quotes': ['error', 'single', {
-            avoidEscape: true,
-            allowTemplateLiterals: false,
-        }],
         'radix': 'error',
         'require-atomic-updates': 'error',
         // siehe @typescript-eslint/require-await
         'require-await': 'off',
         'require-unicode-regexp': 'error',
-        'rest-spread-spacing': 'error',
-        'semi': ['error', 'always'],
-        'semi-spacing': 'error',
-        //'sort-imports': 'error',
-        'space-before-blocks': 'error',
-        // siehe @typescript-eslint/space-before-function-paren
-        'space-before-function-paren': 'off',
-        'space-in-parens': 'error',
-        // siehe @typescript-eslint/space-infix-ops
-        'space-infix-ops': 'off',
-        'space-unary-ops': 'error',
-        'spaced-comment': 'error',
         'strict': 'error',
-        'switch-colon-spacing': 'error',
         'symbol-description': 'error',
-        'template-curly-spacing': 'error',
-        'wrap-iife': 'error',
-        'yield-star-spacing': 'error',
         'yoda': ['error', 'never'],
     },
 };

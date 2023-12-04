@@ -14,7 +14,7 @@ services:
   # https://docs.docker.com/compose/compose-file
   # https://docs.docker.com/compose/compose-file/compose-file-v3
   jenkins-docker:
-    image: docker:24.0.6-dind
+    image: docker:25.0.0-beta.1-dind
     ports:
       - published: 3000
         target: 3000

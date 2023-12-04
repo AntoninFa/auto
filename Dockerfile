@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.6.0
-ARG NODE_VERSION=20.8.1
+ARG NODE_VERSION=20.10.0
 FROM node:${NODE_VERSION}-bookworm AS builder
 
 WORKDIR /home/node
@@ -46,10 +46,8 @@ FROM gcr.io/distroless/nodejs20-debian12:nonroot
 
 LABEL org.opencontainers.image.title="auto" \
     org.opencontainers.image.description="Appserver auto mit distroless-Image" \
-    org.opencontainers.image.version="2023.10.0-distroless" \
-    org.opencontainers.image.licenses="GPL-3.0-or-later" \
-    org.opencontainers.image.authors="Anto"
-
+    org.opencontainers.image.version="2024.04.0-distroless" \
+    org.opencontainers.image.licenses="GPL-3.0-or-later"
 WORKDIR /opt/app
 
 COPY --chown=nonroot:nonroot package.json .env ./

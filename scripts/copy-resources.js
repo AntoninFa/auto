@@ -1,9 +1,7 @@
 import fs from 'node:fs';
-import fsExtra from 'fs-extra';
 import path from 'node:path';
 
-const { existsSync, mkdirSync } = fs;
-const { copySync } = fsExtra;
+const { cpSync, existsSync, mkdirSync } = fs;
 const { join } = path
 
 const src = 'src';
@@ -12,7 +10,8 @@ if (!existsSync(dist)) {
     mkdirSync(dist);
 }
 
+// DB-Skripte, EM-Dateien fuer TLS und JWT sowie GraphQL-Schema kopieren
 const resourcesSrc = join(src, 'config', 'resources');
 const resourcesDist = join(dist, src, 'config', 'resources');
 mkdirSync(resourcesDist, { recursive: true });
-copySync(resourcesSrc, resourcesDist);
+cpSync(resourcesSrc, resourcesDist, { recursive: true });

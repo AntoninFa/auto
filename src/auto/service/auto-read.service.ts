@@ -11,8 +11,6 @@ import {
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { type Ausstattung } from '../entity/ausstattung.entity.js';
 import { QueryBuilder } from './query-builder.js';
-// eslint-disable-next-line @typescript-eslint/naming-convention
-import RE2 from 're2';
 import { getLogger } from '../../logger/logger.js';
 
 /**
@@ -47,7 +45,7 @@ export interface Suchkriterien {
  */
 @Injectable()
 export class AutoReadService {
-    static readonly ID_PATTERN = new RE2('^[1-9][\\d]*$');
+    static readonly ID_PATTERN = /^[1-9]\d{0,10}$/u;
 
     readonly #autoProps: string[];
 
