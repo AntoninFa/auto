@@ -46,7 +46,7 @@ FROM gcr.io/distroless/nodejs20-debian12:nonroot
 
 LABEL org.opencontainers.image.title="auto" \
     org.opencontainers.image.description="Appserver auto mit distroless-Image" \
-    org.opencontainers.image.version="2024.04.0-distroless" \
+    org.opencontainers.image.version="2023.10.0-distroless" \
     org.opencontainers.image.licenses="GPL-3.0-or-later"
 WORKDIR /opt/app
 
